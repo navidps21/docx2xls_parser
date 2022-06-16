@@ -49,7 +49,7 @@ def get_text (wordDoc):
     for para in wordDoc.paragraphs:
         fullText.append(para.text)
     #return '\n'.join(fullText)
-    print (fullText)
+    #print (fullText)
     return (fullText)
 
 def get_year (fullText):
@@ -128,7 +128,7 @@ def get_age (tables_data):
     age_data = age_data + str(age)
     
     indices = [i for i, s in enumerate(tables_data) if 'DN:' in s]
-    tables_data.insert(indices[0]+1, age_data)
+    tables_data.insert(indices[0]+10, age_data)
 
     return (tables_data)
 
@@ -250,6 +250,89 @@ def get_path(file_path, abs_path):
     path = path + str(abs_path) + '\\' + str(file_path)
     path = path.replace("\\","/")
     return (path)
+
+def organizer (tables_data):
+    #organize the table
+    new_table = ['s'] * 23
+    for i in tables_data:
+        if 'ANO:' in i:
+            new_table[0] = i
+        elif 'MÊS:' in i:
+            new_table[1] = i
+        elif 'DSEI DE ORIGEM:' in i:
+            new_table[2] = i
+        elif 'SEXO:' in i:
+            new_table[3] = i
+        elif 'NOME DO PACIENTE:' in i:
+            new_table[4] = i
+        elif 'DN:' in i:
+            new_table[5] = i
+        elif 'IDADE:' in i:
+            new_table[6] = i
+        if 'COMUNIDADE:' in i:
+            new_table[7] = i
+        elif 'ETNIA:' in i:
+            new_table[8] = i
+        elif 'DATA DO INGRESSO:' in i:
+            new_table[9] = i
+        elif 'DATA DA ALTA:' in i:
+            new_table[10] = i
+        elif 'TEMPO DE INTERNAÇÃO:' in i:
+            new_table[11] = i
+        elif 'HD:' in i:
+            new_table[12] = i
+        elif 'CONDIÇÃO DO INGRESSO:' in i:
+            new_table[13] = i
+        elif 'CONDIÇÃO DO EGRESSO:' in i:
+            new_table[14] = i
+        elif 'DESLOCAMENTO:' in i:
+            new_table[15] = i
+        elif 'PARA:' in i:
+            new_table[16] = i
+        elif 'MEIO DE TRANSPORTE:' in i:
+            new_table[17] = i
+        elif 'ACOMPANHANTE:' in i:
+            new_table[18] = i
+        elif 'ALTA PROVISÓRIA:' in i:
+            new_table[19] = i
+        elif 'PROBLEMA RESOLVIDO:' in i:
+            new_table[20] = i
+        elif 'DESISTÊNCIA:' in i:
+            new_table[21] = i
+        elif 'CAMINHO:' in i:
+            new_table[22] = i
+    return new_table
+
+def get_data (wordDoc, file_path, abs_path):
+    #generate tables_data
+    
+    tables_data = get_tables_data(wordDoc)
+
+    text_data = get_text(wordDoc)
+
+    tables_data.insert(0, get_year(text_data))
+
+    tables_data.insert(1, get_month(text_data))
+
+    tables_data.insert(2, get_gender())
+
+    tables_data = get_age(tables_data)
+
+    tables_data = get_time(tables_data)
+
+    tables_data.append(get_companion(tables_data))
+
+    tables_data.append(get_provdischarge(text_data))
+
+    tables_data = get_problemsolved(tables_data)
+
+    tables_data.append(get_giveup(text_data))
+
+    tables_data.append(get_path(file_path, abs_path))
+
+    new_table = organizer(tables_data)
+
+    return new_table
 
 def create_sheet (data):
     #this function create a sheet
