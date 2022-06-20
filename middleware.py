@@ -217,6 +217,20 @@ def get_giveup(text_data):
             giveup = giveup + "N"
             return giveup
 
+def get_internment(text_data):
+    #this function return if pacient were internment or not
+    internment = 'INTERNAÇÃO HOSPITALAR: '
+    for i in text_data:
+        if 'interna' in i:
+            internment = internment + "S"
+            return internment
+        elif 'Interna' in i:
+            internment = internment + "S"
+            return internment
+        else:
+            internment = internment + "N"
+            return internment
+
 def get_provdischarge (text_data):
     #this functions return if pacient had a provisional discharge
     #this function return if pacient give up or not
@@ -253,7 +267,7 @@ def get_path(file_path, abs_path):
 
 def organizer (tables_data):
     #organize the table
-    new_table = ['s'] * 23
+    new_table = ['s'] * 24
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -285,22 +299,24 @@ def organizer (tables_data):
             new_table[13] = i
         elif 'CONDIÇÃO DO EGRESSO:' in i:
             new_table[14] = i
-        elif 'DESLOCAMENTO:' in i:
+        elif 'INTERNAÇÃO HOSPITALAR:' in i:
             new_table[15] = i
-        elif 'PARA:' in i:
+        elif 'DESLOCAMENTO:' in i:
             new_table[16] = i
-        elif 'MEIO DE TRANSPORTE:' in i:
+        elif 'PARA:' in i:
             new_table[17] = i
-        elif 'ACOMPANHANTE:' in i:
+        elif 'MEIO DE TRANSPORTE:' in i:
             new_table[18] = i
-        elif 'ALTA PROVISÓRIA:' in i:
+        elif 'ACOMPANHANTE:' in i:
             new_table[19] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'ALTA PROVISÓRIA:' in i:
             new_table[20] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[21] = i
-        elif 'CAMINHO:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[22] = i
+        elif 'CAMINHO:' in i:
+            new_table[23] = i
     return new_table
 
 def get_data (wordDoc, file_path, abs_path):
@@ -327,6 +343,8 @@ def get_data (wordDoc, file_path, abs_path):
     tables_data = get_problemsolved(tables_data)
 
     tables_data.append(get_giveup(text_data))
+
+    tables_data.append(get_internment(text_data))
 
     tables_data.append(get_path(file_path, abs_path))
 

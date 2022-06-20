@@ -73,7 +73,12 @@ motivo do retorno
 
 
 
+implementações:
 
+titulo colunas
+informar nº de arquivos corrompidos
+informar progresso
+bat script para rodar automático
 
 
 
@@ -98,10 +103,11 @@ motivo da desistencia *** (paragrafos)
 consulta (atendimento recebido) (trocar por atendimento recebido)
 especialista consultado (area)
 exame realizado (laboratorial/imagem/biopsia)
-internação hospitalar (s/n) (palavra internação)
 data do retorno (01/01/0001) (tabela cronograma de retorno)
 delta entre alta e retorno (dias)
 motivo do retorno (pref. motivo está em consulta)(paragrafos com retorno dos ultimos paragrafos)
+
+
 
 
 
@@ -118,6 +124,7 @@ Tempo de internação (dias)
 DN (data de nascimento)
 condição na admissão
 condição na alta
+internação hospitalar (s/n) (palavra internação)
 Idade (calcular DN)
 COMUNIDADE
 ETNIA
@@ -150,7 +157,6 @@ VRJ
 ANO
 
 2018
-2019  OK
 2020
 2021
 
