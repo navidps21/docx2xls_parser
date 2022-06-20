@@ -78,7 +78,7 @@ implementações:
 titulo colunas
 informar nº de arquivos corrompidos
 informar progresso
-bat script para rodar automático
+informar número de arquivos
 
 
 
@@ -106,9 +106,6 @@ exame realizado (laboratorial/imagem/biopsia)
 data do retorno (01/01/0001) (tabela cronograma de retorno)
 delta entre alta e retorno (dias)
 motivo do retorno (pref. motivo está em consulta)(paragrafos com retorno dos ultimos paragrafos)
-
-
-
 
 
 
@@ -159,4 +156,234 @@ ANO
 2018
 2020
 2021
+
+
+
+
+
+Instituições SUSAM:
+
+SPA e Policlínica Dr. Danilo Corrêa
+Policlínica Codajás
+Fundação Hospital do Coração Francisca Mendes – Francisca Mendes
+CAIC Moura Tapajós
+CAIC Dr. José Contente
+SPA Zona Sul
+CAIC Ana Maria dos Santos Pereira Braga
+Hospital Psiquiátrico Eduardo Ribeiro
+Policlínica Antônio Aleixo
+Instituto de Saúde da Criança do Amazonas – ICAM
+Hospital Geral Dr. Geraldo da Rocha
+Hospital e Maternidade Chapot Prevost
+HPS - Dr. João Lúcio Pereira Machado – João Lúcio 
+HPS - Dr. Aristóteles Platão Bezerra de Araújo – Platão
+H. P. S. da Criança - Zona Sul
+CAIMI André Araújo
+CAIMI Paulo Lima
+Maternidade Estadual Balbina Mestrinho
+Maternidade Azilda da Silva Marreiro	
+SPA Enfermeira Eliameme Rodrigues Mady
+SPA Coroado
+CAIC Dra. Maria Helena Freitas de Góes
+CAIC Dr. Gilson Moreira
+CAIC Dr. Rubim de Sá
+CAIC José Carlos Mestrinho
+CAIC Dr. Edson Melo
+CAIC Dr. Afrânio Soares
+CAIC Alberto Carreira
+SPA São Raimundo
+CAIC Dra. Josephina de Mello
+Maternidade Cidade Nova Dona Nazira Daou
+SPA Joventina Dias
+Centro de Atenção Psicossocial Silvério Tundis
+Hospital Infantil Dr. Fajardo
+Policlínica Cardoso Fontes
+CEMA
+LACEN - Laboratório Central
+SPA e Policlínica Dr. José de Jesus Lins de Albuquerque
+CAIC Alexandre Montoril
+CAIMI Ada Rodrigues Viana
+CEPRA
+Maternidade Alvorada
+Maternidade Ana Braga
+Fundação de Hematologia e Hemoterapia do Amazonas - FHEMOAM
+SPA Alvorada
+Policlínica Zeno Lanzini
+Policlínica João dos Santos Braga
+H. P. S. 28 de Agosto
+Policlínica Governador Gilberto Mestrinho
+H. P. S. da Criança - Zona Leste
+H. P. S. da Criança - Zona Oeste
+Fundação CECON
+Hospital Universitário Getúlio Vargas – HUGV
+Fundação de Medicina Tropical – FMT
+Fundação Hospital Adriano Jorge – FHAJ
+Fundação Alfredo da Matta – FAM
+Fundação de Vigilância em Saúde do Amazonas - Dra. Rosemary Costa Pinto
+Instituto da Mulher Dona Lindú
+Hospital Delphina Aziz
+UPA Campos Sales
+UPA José Rodrigues
+
+
+SEMSA:
+UBS
+
+Particulares:
+Hapvida
+SENSUMED
+Check up
+Hospital Santo Alberto
+Hospital Beneficente Portuguesa
+Hospital Adventista 
+Hospital Santa Júlia 
+Instituto de Oftalmologia de Manaus - IOM 
+
+
+
+
+
+
+
+Especialidades Médicas:
+Acupuntura
+Alergia e imunologia
+Anestesiologia
+Angiologia
+Cardiologia/ cardiologista
+Cirurgia cardiovascular
+Cirurgia da mão
+Cirurgia de cabeça e pescoço
+Cirurgia do aparelho digestivo
+Cirurgia geral
+Cirurgia oncológica
+Cirurgia pediátrica
+Cirurgia plástica
+Cirurgia torácica
+Cirurgia vascular
+Clínica médica/ clínico
+Coloproctologia
+Dermatologia/ dermatologista
+Endocrinologia e metabologia/ endócrino
+Endoscopia
+Gastroenterologia/ gastro
+Genética médica
+Geriatria
+Ginecologia e obstetrícia
+Hematologia e hemoterapia/ hematologista
+Homeopatia/ homeopata
+Infectologia/ infectologista
+Mastologia
+Medicina de emergência
+Medicina de família e comunidade
+Medicina do trabalho
+Medicina de tráfego
+Medicina esportiva
+Medicina física e reabilitação
+Medicina intensiva
+Medicina legal e perícia médica
+Medicina nuclear
+Medicina preventiva e social/ médico de família
+Nefrologia/ nefrologista
+Neurocirurgia/ neurologista
+Neurologia/ neurologista
+Nutrologia
+Oftalmologia/ oftalmologista
+Oncologia clínica/ oncologista/ onco
+Ortopedia e traumatologia/ ortopedista
+Otorrinolaringologia/ otorrino
+Patologia
+Patologia clínica/medicina laboratorial
+Pediatria
+Pneumologia/ pneumologista
+Psiquiatria
+Radiologia e diagnóstico por imagem
+Radioterapia
+Reumatologia/ reumatologista
+Urologia/ urologista
+
+
+
+
+
+
+
+
+Condição sensível à Atenção Primária: definida de acordo com a Lista Brasileira de Internações por Condições Sensíveis à Atenção Primária (Brasil, 2008): 
+
+Coqueluche
+Difteria
+Tétano
+Parotidite
+Rubéola
+Sarampo
+Febre Amarela
+Hepatite B
+Meningite por Haemophilus
+Meningite Tuberculosa
+Tuberculose miliar
+Tuberculose Pulmonar
+Outras Tuberculoses
+Febre reumática
+Sífilis
+Malária
+Ascaridiase
+Desidratação
+Gastroenterites  
+Anemia por deficiência de ferro
+Kwashiokor e outras formas de desnutrição protéico calórica
+Outras deficiências nutricionais 
+Otite média supurativa
+Nasofaringite aguda [resfriado comum]
+Sinusite aguda
+Faringite aguda
+Amigdalite aguda
+Infecção Aguda VAS
+Rinite, nasofaringite e faringite crônicas
+Pneumonia Pneumocócica
+Pneumonia por Haemophilus infuenzae
+Pneumonia por Streptococus
+Pneumonia bacteriana NE
+Pneumonia lobar NE
+Asma
+Bronquite aguda
+Bronquite não especificada como aguda ou crônica
+Bronquite crônica simples e a mucopurulenta
+Bronquite crônica não especificada
+Enfisema
+Bronquectasia
+Outras doenças pulmonares obstrutivas crônicas
+Hipertensão essencial
+Doença cardíaca hipertensiva
+Angina pectoris
+Insuficiência Cardíaca
+Edema agudo de pulmão
+Doenças Cerebrovasculares
+Diabetes melitus Com coma ou cetoacidose
+Diabetes melitus Com complicações (renais, oftalmicas, neurol., circulat.,
+periféricas, múltiplas, outras e NE)  
+Diabetes melitus Sem complicações específicas
+Eplepsias
+Nefrite túbulo-intersticial aguda
+Nefrite túbulo-intersticial crônica
+Nefrite túbulo-intersticial NE aguda crônica
+Cistite
+Uretrite
+Infecção do trato urinário de localização NE
+Erisipela
+Impetigo
+Abscesso cutâneo furúnculo e carbúnculo
+Celulite
+Linfadenite aguda
+Outras infecções localizadas na pele e tecido subcutâneo
+Salpingite e ooforite
+Doença inflamatória do útero exceto o colo
+Doença inflamatória do colo do útero
+Outras doenças inflamatórias pélvicas femininas
+Doenças da glândula de Bartholin
+Outras afecções inflamatórias da vagina. e da vulva
+Úlcera gastrointestinal
+Infecção no Trato Urinário na gravidez
+Sífilis congênita
+Síndrome da Rubéola Congênita
 
