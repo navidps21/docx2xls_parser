@@ -52,6 +52,14 @@ def get_text (wordDoc):
     #print (fullText)
     return (fullText)
 
+def lowercase_text (fullText):
+    lc_fullText = []
+    for i in fullText:
+        lc_fullText.append(i.lower())
+        
+    #print(lc_fullText)
+    return (lc_fullText)
+
 def get_year (fullText):
     #get the year of the document
 
@@ -206,11 +214,11 @@ def get_companion(tables_data):
 def get_giveup(text_data):
     #this function return if pacient give up or not
     giveup = 'DESISTÊNCIA: '
-    for i in text_data:
+
+    lc_text = lowercase_text(text_data)
+
+    for i in lc_text:
         if 'desist' in i:
-            giveup = giveup + "S"
-            return giveup
-        elif 'Desist' in i:
             giveup = giveup + "S"
             return giveup
         else:
@@ -220,11 +228,11 @@ def get_giveup(text_data):
 def get_internment(text_data):
     #this function return if pacient were internment or not
     internment = 'INTERNAÇÃO HOSPITALAR: '
-    for i in text_data:
+    
+    lc_text = lowercase_text(text_data)
+
+    for i in lc_text:
         if 'interna' in i:
-            internment = internment + "S"
-            return internment
-        elif 'Interna' in i:
             internment = internment + "S"
             return internment
         else:
