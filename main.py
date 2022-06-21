@@ -11,7 +11,7 @@ wordDoc = Document(file_path)
 abs_path = os.path.abspath(os.getcwd())
 
 #Get data from the tables and text
-tables_data = get_data(wordDoc, file_path, abs_path)
+tables_data = get_data(wordDoc, specialist_dict, file_path, abs_path)
 
 #print (tables_data)
 

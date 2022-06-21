@@ -5,6 +5,19 @@ import re as r
 import xlwt
 
 
+def get_raw_tables_data (wordDoc):
+    raw_data = []
+    data = []
+
+    for table in wordDoc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                raw_data.append(str(cell.text))
+
+    raw_data = list(filter(None, raw_data))
+    #print (raw_data)
+    return (raw_data)
+
 def get_tables_data (wordDoc):
     # get_tables_data extract data from the document's tables
 
@@ -55,10 +68,18 @@ def get_text (wordDoc):
 def lowercase_text (fullText):
     lc_fullText = []
     for i in fullText:
-        lc_fullText.append(i.lower())
+        lc_fullText.append(i.lower().replace('ç', 'c').replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ã', 'a').replace('ê', 'e'))
         
     #print(lc_fullText)
     return (lc_fullText)
+
+def lowercase_table (tables_data):
+    lc_tablesdata = []
+    for i in tables_data:
+        lc_tablesdata.append(i.lower().replace('ç', 'c').replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ã', 'a').replace('ê', 'e'))
+        
+    #print(lc_tablesdata)
+    return (lc_tablesdata)
 
 def get_year (fullText):
     #get the year of the document
@@ -265,6 +286,20 @@ def get_problemsolved (tables_data):
 
     return (tables_data)
 
+def get_specialty (dict, tables_data):
+
+    new_table = lowercase_table(tables_data)
+
+    specialty = 'ESPECIALIDADES: '
+
+    for i in new_table:
+        for j in dict:
+            if j in i:
+                if specialty.find(str(dict[j])) == -1 :
+                    specialty = specialty + str(dict[j])
+
+    return specialty
+
 def get_path(file_path, abs_path):
     #get path of the project and generate a hyperlink
 
@@ -275,7 +310,7 @@ def get_path(file_path, abs_path):
 
 def organizer (tables_data):
     #organize the table
-    new_table = ['s'] * 24
+    new_table = ['s'] * 25
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -303,34 +338,38 @@ def organizer (tables_data):
             new_table[11] = i
         elif 'HD:' in i:
             new_table[12] = i
-        elif 'CONDIÇÃO DO INGRESSO:' in i:
+        elif 'ESPECIALIDADES:' in i:
             new_table[13] = i
-        elif 'CONDIÇÃO DO EGRESSO:' in i:
+        elif 'CONDIÇÃO DO INGRESSO:' in i:
             new_table[14] = i
-        elif 'INTERNAÇÃO HOSPITALAR:' in i:
+        elif 'CONDIÇÃO DO EGRESSO:' in i:
             new_table[15] = i
-        elif 'DESLOCAMENTO:' in i:
+        elif 'INTERNAÇÃO HOSPITALAR:' in i:
             new_table[16] = i
-        elif 'PARA:' in i:
+        elif 'DESLOCAMENTO:' in i:
             new_table[17] = i
-        elif 'MEIO DE TRANSPORTE:' in i:
+        elif 'PARA:' in i:
             new_table[18] = i
-        elif 'ACOMPANHANTE:' in i:
+        elif 'MEIO DE TRANSPORTE:' in i:
             new_table[19] = i
-        elif 'ALTA PROVISÓRIA:' in i:
+        elif 'ACOMPANHANTE:' in i:
             new_table[20] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'ALTA PROVISÓRIA:' in i:
             new_table[21] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[22] = i
-        elif 'CAMINHO:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[23] = i
+        elif 'CAMINHO:' in i:
+            new_table[24] = i
     return new_table
 
-def get_data (wordDoc, file_path, abs_path):
+def get_data (wordDoc, dict, file_path, abs_path):
     #generate tables_data
     
     tables_data = get_tables_data(wordDoc)
+
+    raw_tables_data = get_raw_tables_data (wordDoc)
 
     text_data = get_text(wordDoc)
 
@@ -343,6 +382,8 @@ def get_data (wordDoc, file_path, abs_path):
     tables_data = get_age(tables_data)
 
     tables_data = get_time(tables_data)
+
+    tables_data.append(get_specialty(dict, raw_tables_data))
 
     tables_data.append(get_companion(tables_data))
 
@@ -382,3 +423,68 @@ def create_sheet (data):
         sheet1.write(1, i, infos[i])
 
     book.save("test.xls")
+
+
+#there's some dicts that are used
+
+
+specialist_dict = {
+        'acupuntu' : 'ACUPUNTURISTA',
+        'alergia e imunologia' : 'ALERGIA E IMUNOLOGIA',
+        'anestesiologia' : 'ANESTESIOLOGIA',
+        'angiologia' : 'ANGIOLOGIA',
+        'cardio' : 'CARDIOLOGISTA',
+        'cirurgia cardiovascular' : 'CIRURGIA CARDIOVASCULAR',
+        'cirurgia da mao' : 'CIRURGIA DA MÃO',
+        'cirurgia de cabeca e pescoco' : 'CIRURGIA DE CABEÇA E PESCOÇO',
+        'cirurgia do aparelho digestivo' : 'CIRURGIA DO APARELHO DIGESTIVO',
+        'cirurgia geral' : 'CIRURGIA GERAL',
+        'cirurgia oncologica' : 'CIRURGIA ONCOLÓGICA',
+        'cirurgia pediatrica' : 'CIRURGIA PEDIÁTRICA',
+        'cirurgia plastica' : 'CIRURGIA PLÁSTICA',
+        'cirurgia torácica' : 'CIRURGIA TORÁCICA',
+        'cirurgia vascular' : 'CIRURGIA VASCULAR',
+        'clinica medica' : 'CLÍNICO',
+        'clinico' : 'CLÍNICO',
+        'coloproctologia' : 'COLOPROCTOLOGIA ',
+        'dermato' : 'DERMATOLOGISTA',
+        'endocrino' : 'ENDÓCRINO',
+        'endoscopia' : 'ENDOSCOPIA',
+        'gastro' : 'GASTROENTEROLOGIA',
+        'genetica medica' : 'GENÉTICA MÉDICA',
+        'geriatria' : 'GERIATRIA',
+        'ginecologi' : 'GINECOLOGIA E OBSTETRÍCIA',
+        'hematologi' : 'HEMATOLOGISTA',
+        'hemotera' : 'HEMATOLOGISTA',
+        'hepat' : 'HEPATOLOGISTA',
+        'homeopat' : 'HOMEOPATA',
+        'infecto' : 'INFECTOLOGISTA',
+        'mastologia' : 'MASTOLOGIA',
+        'medicina de emergencia' : 'MEDICINA DE EMERGÊNCIA',
+        'medicina de familia' : 'MEDICINA DE FAMÍLIA',
+        'medicina do trabalho' : 'MEDICINA DO TRABALHO',
+        'medicina de trafego' : 'MEDICINA DE TRÁFEGO',
+        'medicina esportiva' : 'MEDICINA ESPORTIVA',
+        'medicina fisica e reabilitacao' : 'MEDICINA FÍSICA E REABILITAÇÃO',
+        'medicina intensiva' : 'MEDICINA INTENSIVA',
+        'medicina legal e pericia medica' : 'MEDICINA LEGAL E PERÍCIA MÉDICA',
+        'medicina nuclear' : 'MEDICINA NUCLEAR',
+        'medicina preventiva' : 'MÉDICO DE FAMÍLIA',
+        'nefrolog' : 'NEFROLOGISTA',
+        'neurocirurg' : 'NEUROLOGISTA',
+        'neurolog' : 'NEUROLOGISTA',
+        'nutrologia' : 'NUTROLOGIA',
+        'oftalmo' : 'OFTALMOLOGISTA',
+        'onco' : 'ONCOLOGISTA',
+        'ortoped' : 'ORTOPEDISTA',
+        'otorrino' : 'OTORRINOLARINGOLOGIA',
+        'patolog' : 'PATOLOGIA',
+        'patologia clínica/medicina laboratorial' : 'PATOLOGIA CLÍNICA/MEDICINA LABORATORIAL',
+        'pediatria' : 'PEDIATRIA',
+        'pneumolog' : 'PNEUMOLOGISTA',
+        'psiquiat' : 'PSIQUIATRIA',
+        'radiolog' : 'RADIOLOGIA E DIAGNÓSTICO POR IMAGEM',
+        'radioterapia' : 'RADIOTERAPIA',
+        'reumatolo' : 'REUMATOLOGISTA ',
+        'urolo' : 'UROLOGISTA',
+    }

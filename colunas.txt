@@ -79,7 +79,8 @@ titulo colunas
 informar nº de arquivos corrompidos
 informar progresso
 informar número de arquivos
-
+criar novas planilhas
+ordem nomes
 
 
 
@@ -101,7 +102,6 @@ unidade referenciada (onde foi atendido) (descrever todos os locais) ***
 situação do paciente (paragrafos apos ultima tabela)
 motivo da desistencia *** (paragrafos)
 consulta (atendimento recebido) (trocar por atendimento recebido)
-especialista consultado (area)
 exame realizado (laboratorial/imagem/biopsia)
 data do retorno (01/01/0001) (tabela cronograma de retorno)
 delta entre alta e retorno (dias)
@@ -121,6 +121,7 @@ Tempo de internação (dias)
 DN (data de nascimento)
 condição na admissão
 condição na alta
+especialista consultado (area)
 internação hospitalar (s/n) (palavra internação)
 Idade (calcular DN)
 COMUNIDADE
@@ -154,7 +155,6 @@ VRJ
 ANO
 
 2018
-2020
 2021
 
 
@@ -239,68 +239,6 @@ Hospital Adventista
 Hospital Santa Júlia 
 Instituto de Oftalmologia de Manaus - IOM 
 
-
-
-
-
-
-
-Especialidades Médicas:
-Acupuntura
-Alergia e imunologia
-Anestesiologia
-Angiologia
-Cardiologia/ cardiologista
-Cirurgia cardiovascular
-Cirurgia da mão
-Cirurgia de cabeça e pescoço
-Cirurgia do aparelho digestivo
-Cirurgia geral
-Cirurgia oncológica
-Cirurgia pediátrica
-Cirurgia plástica
-Cirurgia torácica
-Cirurgia vascular
-Clínica médica/ clínico
-Coloproctologia
-Dermatologia/ dermatologista
-Endocrinologia e metabologia/ endócrino
-Endoscopia
-Gastroenterologia/ gastro
-Genética médica
-Geriatria
-Ginecologia e obstetrícia
-Hematologia e hemoterapia/ hematologista
-Homeopatia/ homeopata
-Infectologia/ infectologista
-Mastologia
-Medicina de emergência
-Medicina de família e comunidade
-Medicina do trabalho
-Medicina de tráfego
-Medicina esportiva
-Medicina física e reabilitação
-Medicina intensiva
-Medicina legal e perícia médica
-Medicina nuclear
-Medicina preventiva e social/ médico de família
-Nefrologia/ nefrologista
-Neurocirurgia/ neurologista
-Neurologia/ neurologista
-Nutrologia
-Oftalmologia/ oftalmologista
-Oncologia clínica/ oncologista/ onco
-Ortopedia e traumatologia/ ortopedista
-Otorrinolaringologia/ otorrino
-Patologia
-Patologia clínica/medicina laboratorial
-Pediatria
-Pneumologia/ pneumologista
-Psiquiatria
-Radiologia e diagnóstico por imagem
-Radioterapia
-Reumatologia/ reumatologista
-Urologia/ urologista
 
 
 
