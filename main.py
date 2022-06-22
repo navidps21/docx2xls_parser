@@ -13,6 +13,7 @@ abs_path = os.path.abspath(os.getcwd())
 #Get data from the tables and text
 tables_data = get_data(wordDoc, specialist_dict, file_path, abs_path)
 
+text_data = get_text(wordDoc)
 #print (tables_data)
 
 print ('Work done!')

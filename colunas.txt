@@ -96,7 +96,6 @@ ordem nomes
 
 
 
-doença negligenciada (s/n) consumir lista
 condição sensivel a condição primaria (s/n) consumir lista
 unidade referenciada (onde foi atendido) (descrever todos os locais) ***
 situação do paciente (paragrafos apos ultima tabela)
@@ -130,6 +129,7 @@ MEIO DE TRANSPORTE (FLUVIAL EX.)
 DESLOCAMENTO(BENJAMIN CONSTANT)
 PROBLEMA DE SAÚDE (descrição hd)
 ACOMPANHANTE (S/N)
+doença negligenciada (s/n) consumir lista
 alta provisória (s/n) (obs: info)
 problema resolvido (s/n) (atrelado a alta provisoria == n)
 desistencia (s/n)
@@ -324,4 +324,9 @@ Outras afecções inflamatórias da vagina. e da vulva
 Infecção no Trato Urinário na gravidez
 Sífilis congênita
 Síndrome da Rubéola Congênita
+
+
+
+
+
 

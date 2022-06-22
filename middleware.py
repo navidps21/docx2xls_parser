@@ -2,6 +2,7 @@
 from docx import Document
 from datetime import *
 import re as r
+from matplotlib.pyplot import text
 import xlwt
 
 
@@ -61,9 +62,10 @@ def get_text (wordDoc):
     fullText = []
     for para in wordDoc.paragraphs:
         fullText.append(para.text)
-    #return '\n'.join(fullText)
-    #print (fullText)
-    return (fullText)
+    new_fullText = list(filter(None, fullText))
+    #return '\n'.join(new_fullText)
+    #print (new_fullText)
+    return (new_fullText)
 
 def lowercase_text (fullText):
     lc_fullText = []
@@ -232,6 +234,36 @@ def get_companion(tables_data):
                 companion = companion + "N"
                 return companion
 
+def get_neglecteddiseases (text_data):
+
+    neglecteddiseases = [
+        'malaria',
+        'doença de Chagas',
+        'leishmaniose',
+        'tuberculose',
+        'dengue',
+        'hanseniase',
+        'esquistossomose',
+        'oncocercose',
+        'filariose',
+        'tracoma',
+        'helmintos',
+        'nematoides de solo'
+    ]
+
+    new_text = lowercase_text(text_data)
+
+    neglected = 'DOENÇA NEGLIGENCIADA: '
+
+    for i in new_text:
+        for j in neglecteddiseases:
+            if j in i:
+                neglected = neglected + 'S'
+                return (neglected)
+    
+    neglected = neglected + 'N'
+    return (neglected)
+
 def get_giveup(text_data):
     #this function return if pacient give up or not
     giveup = 'DESISTÊNCIA: '
@@ -286,6 +318,37 @@ def get_problemsolved (tables_data):
 
     return (tables_data)
 
+def get_conditition (text_data):
+    
+    pacientcond = 'SITUAÇÃO DO PACIENTE: '
+
+    for i in text_data:
+        if 'PENDENCIAS EM FILA DE ESPERA NO SISREG' in i:
+            indice = [i for i, s in enumerate(text_data) if 'PENDENCIAS EM FILA DE ESPERA NO SISREG' in s]
+            pacientcond = pacientcond + str(text_data[indice[0]+1:])
+            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
+    for i in text_data:
+        if 'CRONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in i:
+            indice = [i for i, s in enumerate(text_data) if 'CRONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in s]
+            pacientcond = pacientcond + str(text_data[indice[0]+1:])
+            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
+    for i in text_data:
+        if 'TERAPIA MEDICAMENTOSA' in i:
+            indice = [i for i, s in enumerate(text_data) if 'TERAPIA MEDICAMENTOSA' in s]
+            pacientcond = pacientcond + str(text_data[indice[0]+1:])
+            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
+    for i in text_data:
+        if 'CONSULTAS/EXAME/CIRURGIA' in i:
+            indice = [i for i, s in enumerate(text_data) if 'CONSULTAS/EXAME/CIRURGIA' in s]
+            pacientcond = pacientcond + str(text_data[indice[0]+1:])
+            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
+    for i in text_data:
+        if 'REGISTRO DE INTERVENÇÕES' in i:
+            indice = [i for i, s in enumerate(text_data) if 'REGISTRO DE INTERVENÇÕES' in s]
+            pacientcond = pacientcond + str(text_data[indice[0]+1:])
+            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
+    return pacientcond
+
 def get_specialty (dict, tables_data):
 
     new_table = lowercase_table(tables_data)
@@ -310,7 +373,7 @@ def get_path(file_path, abs_path):
 
 def organizer (tables_data):
     #organize the table
-    new_table = ['s'] * 25
+    new_table = ['s'] * 27
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -356,12 +419,16 @@ def organizer (tables_data):
             new_table[20] = i
         elif 'ALTA PROVISÓRIA:' in i:
             new_table[21] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[22] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[23] = i
-        elif 'CAMINHO:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[24] = i
+        elif 'DESISTÊNCIA:' in i:
+            new_table[25] = i
+        elif 'CAMINHO:' in i:
+            new_table[26] = i
     return new_table
 
 def get_data (wordDoc, dict, file_path, abs_path):
@@ -392,6 +459,10 @@ def get_data (wordDoc, dict, file_path, abs_path):
     tables_data = get_problemsolved(tables_data)
 
     tables_data.append(get_giveup(text_data))
+
+    tables_data.append(get_neglecteddiseases(text_data))
+
+    tables_data.append(get_conditition(text_data))
 
     tables_data.append(get_internment(text_data))
 
@@ -488,3 +559,19 @@ specialist_dict = {
         'reumatolo' : 'REUMATOLOGISTA ',
         'urolo' : 'UROLOGISTA',
     }
+
+
+neglecteddiseases_dict = {
+    'malaria' : 'MALÁRIA',
+    'doença de Chagas' : 'DOENÇA DE CHAGAS',
+    'leishmaniose' : 'LEISHMANIOSE',
+    'tuberculose' : 'TUBERCULOSE',
+    'dengue' : 'DENGUE',
+    'hanseniase' : 'HANSENÍASE',
+    'esquistossomose' : 'ESQUISTOSSOMOSE',
+    'oncocercose' : 'ONCOCERCOSE',
+    'filariose' : 'FILARIOSE',
+    'tracoma' : 'TRACOMA',
+    'helmintos' : 'HELMINTOS',
+    'nematoides de solo' : 'NEMATÓIDES DE SOLO'
+}
