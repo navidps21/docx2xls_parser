@@ -5,7 +5,8 @@ import os
 
 #Get document in path
 #file_path = 'data\CONTRA REF 2019\MAO\OUTUBRO\ARGEL PALHETA DE MENEZES.docx'
-file_path = 'data\CONTRA REF 2019\MAO\OUTUBRO\PAULO CESAR M. DO ROSARIO.docx'
+#file_path = 'data\CONTRA REF 2019\MAO\OUTUBRO\PAULO CESAR M. DO ROSARIO.docx'
+file_path = 'data\CONTRA-REF. 2018\ARS\OUTUBRO\ADÃO ALEXANDRE PIO.docx'
 
 wordDoc = Document(file_path)
 

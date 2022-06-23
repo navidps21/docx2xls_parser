@@ -205,6 +205,8 @@ def get_destination(tables_data):
 def convert_year(date):
     #this function convert year in format YY to YYYY
 
+    date = date.replace('.', '/')
+
     date_temp = str(r.findall(r'/(.{2}$)', date)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
     date_temp = int(date_temp)
     if date_temp <= 23:
@@ -274,9 +276,9 @@ def get_giveup(text_data):
         if 'desist' in i:
             giveup = giveup + "S"
             return giveup
-        else:
-            giveup = giveup + "N"
-            return giveup
+
+    giveup = giveup + "N"
+    return giveup
 
 def get_internment(text_data):
     #this function return if pacient were internment or not
@@ -288,14 +290,14 @@ def get_internment(text_data):
         if 'interna' in i:
             internment = internment + "S"
             return internment
-        else:
-            internment = internment + "N"
-            return internment
+
+    internment = internment + "N"
+    return internment
 
 def get_provdischarge (text_data):
     #this functions return if pacient had a provisional discharge
     #this function return if pacient give up or not
-    
+
     provdischarge = 'ALTA PROVISÓRIA: '
 
     new_text = lowercase_text(text_data)
