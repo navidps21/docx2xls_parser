@@ -46,7 +46,7 @@ def get_tables_data (wordDoc):
         else:
             temp_data = raw_data[i]
 
-        temp_data = temp_data.replace("\n", '')
+        temp_data = temp_data.replace("\n", ' ').replace('  ',' ')
         
         if ':' in temp_data:
             data.append(temp_data)
@@ -227,7 +227,7 @@ def get_companion(tables_data):
     for i in tables_data:
         if 'NOME DO ACOMPANHANTE:' in i:
             companion_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
-            if len(companion) >= 5:
+            if len(companion_temp) >= 5:
                 companion = companion + "S"
                 return companion
             else:
@@ -295,14 +295,18 @@ def get_internment(text_data):
 def get_provdischarge (text_data):
     #this functions return if pacient had a provisional discharge
     #this function return if pacient give up or not
+    
     provdischarge = 'ALTA PROVISÓRIA: '
-    for i in text_data:
-        if 'ALTA PROVISÓRIA PARA SEU MUNICÍPIO DE ORIGEM' in i:
+
+    new_text = lowercase_text(text_data)
+
+    for i in new_text:
+        if 'paciente de alta provisoria para seu municipio de origem' in i:
             provdischarge = provdischarge + "S"
             return provdischarge
-        else:
-            provdischarge = provdischarge + "N"
-            return provdischarge
+
+    provdischarge = provdischarge + "N"
+    return provdischarge
 
 def get_problemsolved (tables_data):
     #this function return if the problem were solved
@@ -319,47 +323,46 @@ def get_problemsolved (tables_data):
     return (tables_data)
 
 def get_conditition (text_data):
+    #this function return the pacient situation
     
     pacientcond = 'SITUAÇÃO DO PACIENTE: '
 
+    cont = []
+
     for i in text_data:
         if 'PENDENCIAS EM FILA DE ESPERA NO SISREG' in i:
-            indice = [i for i, s in enumerate(text_data) if 'PENDENCIAS EM FILA DE ESPERA NO SISREG' in s]
-            pacientcond = pacientcond + str(text_data[indice[0]+1:])
-            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
-    for i in text_data:
+            indice_1 = [i for i, s in enumerate(text_data) if 'PENDENCIAS EM FILA DE ESPERA NO SISREG' in s]
+            cont.append(indice_1[0])
         if 'CRONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in i:
-            indice = [i for i, s in enumerate(text_data) if 'CRONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in s]
-            pacientcond = pacientcond + str(text_data[indice[0]+1:])
-            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
-    for i in text_data:
+            indice_2 = [i for i, s in enumerate(text_data) if 'CRONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in s]
+            cont.append(indice_2[0])
         if 'TERAPIA MEDICAMENTOSA' in i:
-            indice = [i for i, s in enumerate(text_data) if 'TERAPIA MEDICAMENTOSA' in s]
-            pacientcond = pacientcond + str(text_data[indice[0]+1:])
-            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
-    for i in text_data:
+            indice_3 = [i for i, s in enumerate(text_data) if 'TERAPIA MEDICAMENTOSA' in s]
+            cont.append(indice_3[0])
         if 'CONSULTAS/EXAME/CIRURGIA' in i:
-            indice = [i for i, s in enumerate(text_data) if 'CONSULTAS/EXAME/CIRURGIA' in s]
-            pacientcond = pacientcond + str(text_data[indice[0]+1:])
-            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
-    for i in text_data:
+            indice_4 = [i for i, s in enumerate(text_data) if 'CONSULTAS/EXAME/CIRURGIA' in s]
+            cont.append(indice_4[0])
         if 'REGISTRO DE INTERVENÇÕES' in i:
-            indice = [i for i, s in enumerate(text_data) if 'REGISTRO DE INTERVENÇÕES' in s]
-            pacientcond = pacientcond + str(text_data[indice[0]+1:])
-            return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
-    return pacientcond
+            indice_5 = [i for i, s in enumerate(text_data) if 'REGISTRO DE INTERVENÇÕES' in s]
+            cont.append(indice_5[0])
+
+    indice = max(cont)
+
+    pacientcond = pacientcond + str(text_data[indice+1:])
+
+    return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
 
 def get_specialty (dict, tables_data):
 
     new_table = lowercase_table(tables_data)
 
-    specialty = 'ESPECIALIDADES: '
+    specialty = 'ESPECIALIDADES:'
 
     for i in new_table:
         for j in dict:
             if j in i:
                 if specialty.find(str(dict[j])) == -1 :
-                    specialty = specialty + str(dict[j])
+                    specialty = specialty + ' ' + str(dict[j])
 
     return specialty
 
@@ -559,7 +562,6 @@ specialist_dict = {
         'reumatolo' : 'REUMATOLOGISTA ',
         'urolo' : 'UROLOGISTA',
     }
-
 
 neglecteddiseases_dict = {
     'malaria' : 'MALÁRIA',

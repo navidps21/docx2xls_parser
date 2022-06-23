@@ -80,7 +80,9 @@ informar nº de arquivos corrompidos
 informar progresso
 informar número de arquivos
 criar novas planilhas
-ordem nomes
+
+bug HD
+bug Problema resolvido
 
 
 
@@ -98,7 +100,6 @@ ordem nomes
 
 condição sensivel a condição primaria (s/n) consumir lista
 unidade referenciada (onde foi atendido) (descrever todos os locais) ***
-situação do paciente (paragrafos apos ultima tabela)
 motivo da desistencia *** (paragrafos)
 consulta (atendimento recebido) (trocar por atendimento recebido)
 exame realizado (laboratorial/imagem/biopsia)
@@ -128,6 +129,7 @@ ETNIA
 MEIO DE TRANSPORTE (FLUVIAL EX.)
 DESLOCAMENTO(BENJAMIN CONSTANT)
 PROBLEMA DE SAÚDE (descrição hd)
+situação do paciente (paragrafos apos ultima tabela)
 ACOMPANHANTE (S/N)
 doença negligenciada (s/n) consumir lista
 alta provisória (s/n) (obs: info)
