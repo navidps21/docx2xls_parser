@@ -81,9 +81,6 @@ informar progresso
 informar número de arquivos
 criar novas planilhas
 
-bug dn/data entrada/data alta
-bug HD
-
 
 
 

@@ -43,6 +43,15 @@ def get_tables_data (wordDoc):
         elif 'CONDIÇÃO DO EGRESSO:' in raw_data[i]:
             temp_data = raw_data[i] + raw_data[i+1]
 
+        elif 'DN:' in raw_data[i]:
+            temp_data = raw_data[i].replace('.', '/')
+
+        elif 'DATA DO INGRESSO:' in raw_data[i]:
+            temp_data = raw_data[i].replace('.', '/')
+
+        elif 'DATA DA ALTA:' in raw_data[i]:
+            temp_data = raw_data[i].replace('.', '/')
+
         else:
             temp_data = raw_data[i]
 
@@ -205,7 +214,7 @@ def get_destination(tables_data):
 def convert_year(date):
     #this function convert year in format YY to YYYY
 
-    date = date.replace('.', '/')
+    #date = date.replace('.', '/')
 
     date_temp = str(r.findall(r'/(.{2}$)', date)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
     date_temp = int(date_temp)
@@ -315,7 +324,11 @@ def get_problemsolved (tables_data):
     problemsolved = 'PROBLEMA RESOLVIDO: '
     for i in tables_data:
         if 'ALTA PROVISÓRIA: N' in i:
-            problemsolved = problemsolved + 'S'
+            for i in tables_data:
+                if 'DESISTÊNCIA: S' in i:
+                    problemsolved = problemsolved + 'N'
+                if 'DESISTÊNCIA: N' in i:
+                    problemsolved = problemsolved + 'S'
         if 'ALTA PROVISÓRIA: S' in i:
             problemsolved = problemsolved + 'N'
         
@@ -358,13 +371,15 @@ def get_specialty (dict, tables_data):
 
     new_table = lowercase_table(tables_data)
 
-    specialty = 'ESPECIALIDADES:'
+    #print(new_table)
+
+    specialty = 'ESPECIALIDADES: '
 
     for i in new_table:
         for j in dict:
             if j in i:
                 if specialty.find(str(dict[j])) == -1 :
-                    specialty = specialty + ' ' + str(dict[j])
+                    specialty = specialty + str(dict[j]) + '; '
 
     return specialty
 
@@ -461,9 +476,9 @@ def get_data (wordDoc, dict, file_path, abs_path):
 
     tables_data.append(get_provdischarge(text_data))
 
-    tables_data = get_problemsolved(tables_data)
-
     tables_data.append(get_giveup(text_data))
+
+    tables_data = get_problemsolved(tables_data)
 
     tables_data.append(get_neglecteddiseases(text_data))
 
@@ -512,12 +527,15 @@ specialist_dict = {
         'cardio' : 'CARDIOLOGISTA',
         'cirurgia cardiovascular' : 'CIRURGIA CARDIOVASCULAR',
         'cirurgia da mao' : 'CIRURGIA DA MÃO',
-        'cirurgia de cabeca e pescoco' : 'CIRURGIA DE CABEÇA E PESCOÇO',
+        'cirurgiao de cabeca e pescoco' : 'CIRURGIÃO DE CABEÇA E PESCOÇO',
+        'cirurgia de cabeca e pescoco' : 'CIRURGIÃO DE CABEÇA E PESCOÇO',
+        'cirurgiao cabeca e pescoco' : 'CIRURGIÃO DE CABEÇA E PESCOÇO',
         'cirurgia do aparelho digestivo' : 'CIRURGIA DO APARELHO DIGESTIVO',
         'cirurgia geral' : 'CIRURGIA GERAL',
         'cirurgia oncologica' : 'CIRURGIA ONCOLÓGICA',
         'cirurgia pediatrica' : 'CIRURGIA PEDIÁTRICA',
-        'cirurgia plastica' : 'CIRURGIA PLÁSTICA',
+        'cirurgiao plastico' : 'CIRURGIÃO PLÁSTICO',
+        'cirurgia plastica' : 'CIRURGIÃO PLÁSTICO',
         'cirurgia torácica' : 'CIRURGIA TORÁCICA',
         'cirurgia vascular' : 'CIRURGIA VASCULAR',
         'clinica medica' : 'CLÍNICO',
