@@ -4,7 +4,7 @@ from datetime import *
 import re as r
 import os
 import glob
-from matplotlib.pyplot import text
+#from matplotlib.pyplot import text
 import xlwt
 
 
@@ -299,6 +299,19 @@ def get_giveup(text_data):
     giveup = giveup + "N"
     return giveup
 
+def get_giveup_reason(text_data):
+    #this function return if pacient give up or not
+    giveup_reason = 'MOTIVO DESIST: '
+
+    lc_text = lowercase_text(text_data)
+
+    for i in range (len(lc_text)):
+        if 'desist' in lc_text[i]:
+            giveup_reason = giveup_reason + str(text_data[i])
+            return giveup_reason
+
+    return giveup_reason
+
 def get_internment(text_data):
     #this function return if pacient were internment or not
     internment = 'INTERNAÇÃO HOSPITALAR: '
@@ -403,7 +416,7 @@ def get_path(file_path):
 
 def organizer (tables_data):
     #organize the table
-    new_table = ['s'] * 27
+    new_table = ['s'] * 28
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -457,8 +470,10 @@ def organizer (tables_data):
             new_table[24] = i
         elif 'DESISTÊNCIA:' in i:
             new_table[25] = i
-        elif 'CAMINHO:' in i:
+        if 'MOTIVO DESIST:' in i:
             new_table[26] = i
+        elif 'CAMINHO:' in i:
+            new_table[27] = i
     return new_table
 
 def get_data (wordDoc, dict, file_path, abs_path):
@@ -487,6 +502,8 @@ def get_data (wordDoc, dict, file_path, abs_path):
     tables_data.append(get_provdischarge(text_data))
 
     tables_data.append(get_giveup(text_data))
+
+    tables_data.append(get_giveup_reason(text_data))
 
     tables_data = get_problemsolved(tables_data)
 
@@ -517,6 +534,11 @@ def run_automation():
 
     sheet1 = book.add_sheet("Sheet 1")
 
+    style = xlwt.XFStyle()
+    font = xlwt.Font()
+    font.bold = True
+    style.font = font
+
     specs = []
     infos = []
 
@@ -540,7 +562,7 @@ def run_automation():
 
             for j in range (len(tables_data)):
                 if valid == 0:
-                    sheet1.write(0, j, specs[j])
+                    sheet1.write(0, j, specs[j], style=style)
                     sheet1.write((valid+1), j, infos[j])
                 else:
                     sheet1.write((valid+1), j, infos[j])
@@ -553,19 +575,29 @@ def run_automation():
             #for columns in range (len(tables_data)):
             #    all_tables_data[file_path][columns] = tables_data[columns]
 
-
-
     for file_path in range (len(bad_files)):
         temp = bad_files[file_path].split('\\')[-1]
         if '~$' in temp[:2]:
             issues = issues + 1
 
+    sheet1.col(0).width = 1400
+    sheet1.col(1).width = 1400
+    sheet1.col(2).width = 5000
+    sheet1.col(3).width = 1400
+    sheet1.col(4).width = 7000
+    sheet1.col(5).width = 2600
+    sheet1.col(6).width = 2000
+    sheet1.col(7).width = 5000
+    sheet1.col(8).width = 4000
+    sheet1.col(9).width = 2600
+    sheet1.col(10).width = 2600
+
     book.save("test.xls")
 
-    print ('**********************************************************')
-    print ('there is %d docx files' %len(files))
-    print ('there is %d corrupted files!' %issues)
-    print ('there a total of %d valid files!' %valid)
+    print ('\n**********************************************************')
+    print ('There is %d docx files' %len(files))
+    print ('There is %d corrupted files!' %issues)
+    print ('There is a total of %d valid files!' %valid)
     print ('**********************************************************')
 
     return (0)
@@ -612,6 +644,7 @@ specialist_dict = {
         'cirurgia geral' : 'CIRURGIA GERAL',
         'cirurgia oncologica' : 'CIRURGIA ONCOLÓGICA',
         'cirurgia pediatrica' : 'CIRURGIA PEDIÁTRICA',
+        'cirurgiao pediatri' : 'CIRURGIA PEDIÁTRICA',
         'cirurgiao plastico' : 'CIRURGIÃO PLÁSTICO',
         'cirurgia plastica' : 'CIRURGIÃO PLÁSTICO',
         'cirurgia torácica' : 'CIRURGIA TORÁCICA',
@@ -631,7 +664,7 @@ specialist_dict = {
         'hepat' : 'HEPATOLOGISTA',
         'homeopat' : 'HOMEOPATA',
         'infecto' : 'INFECTOLOGISTA',
-        'mastologia' : 'MASTOLOGIA',
+        'mastolo' : 'MASTOLOGISTA',
         'medicina de emergencia' : 'MEDICINA DE EMERGÊNCIA',
         'medicina de familia' : 'MEDICINA DE FAMÍLIA',
         'medicina do trabalho' : 'MEDICINA DO TRABALHO',

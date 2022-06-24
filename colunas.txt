@@ -70,6 +70,11 @@ motivo do retorno
 
 
 
+Roadmap:
+faltam 7 funções
+faltam converter arquivos para docx!!!
+checar bugs com amostra de 2019
+feedback de melhorias
 
 
 
@@ -81,12 +86,10 @@ motivo do retorno
 
 
 
-
-condição sensivel a condição primaria (s/n) consumir lista
+condição sensivel a condição primaria (s/n) consumir lista ***
 unidade referenciada (onde foi atendido) (descrever todos os locais) ***
-motivo da desistencia *** (paragrafos)
 consulta (atendimento recebido) (trocar por atendimento recebido)
-exame realizado (laboratorial/imagem/biopsia)
+exame realizado (laboratorial/imagem/biopsia)***
 data do retorno (01/01/0001) (tabela cronograma de retorno)
 delta entre alta e retorno (dias)
 motivo do retorno (pref. motivo está em consulta)(paragrafos com retorno dos ultimos paragrafos)
@@ -96,7 +99,7 @@ motivo do retorno (pref. motivo está em consulta)(paragrafos com retorno dos ul
 done:
 ANO de referencia
 MÊS (JUL/AGO..) número
-SEXO (F/M) ***
+***SEXO (F/M)
 DSEI - distrito sanitário especial indigena(ex ARN)
 Nome do Paciente
 Data de Ingresso (data com / ou com .)
@@ -105,20 +108,21 @@ Tempo de internação (dias)
 DN (data de nascimento)
 condição na admissão
 condição na alta
-especialista consultado (area)
+***especialista consultado (area)
 internação hospitalar (s/n) (palavra internação)
 Idade (calcular DN)
 COMUNIDADE
 ETNIA
 MEIO DE TRANSPORTE (FLUVIAL EX.)
 DESLOCAMENTO(BENJAMIN CONSTANT)
-PROBLEMA DE SAÚDE (descrição hd)
+***PROBLEMA DE SAÚDE (descrição hd)
 situação do paciente (paragrafos apos ultima tabela)
-ACOMPANHANTE (S/N)
-doença negligenciada (s/n) consumir lista
+***ACOMPANHANTE (S/N)
+***doença negligenciada (s/n) consumir lista
 alta provisória (s/n) (obs: info)
 problema resolvido (s/n) (atrelado a alta provisoria == n)
 desistencia (s/n)
+motivo da desistencia (paragrafos)
 
 
 

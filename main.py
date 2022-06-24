@@ -2,9 +2,11 @@
 from middleware import *
 
 
+#Run the automation for all files
 run_automation()
 
 
+#Run the automation for one specific file
 """
 #Get document in path
 file_path = 'data\CONTRA REF 2019\MAO\OUTUBRO\ARGEL PALHETA DE MENEZES.docx'
