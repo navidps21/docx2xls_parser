@@ -73,16 +73,6 @@ motivo do retorno
 
 
 
-implementações:
-
-titulo colunas
-informar nº de arquivos corrompidos
-informar progresso
-informar número de arquivos
-criar novas planilhas
-
-
-
 
 
 

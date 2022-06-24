@@ -2,6 +2,8 @@
 from docx import Document
 from datetime import *
 import re as r
+import os
+import glob
 from matplotlib.pyplot import text
 import xlwt
 
@@ -105,44 +107,46 @@ def get_year (fullText):
 def get_month (fullText):
     #get the month of the document
 
+    fullText = lowercase_text(fullText)
+
     month = 'MÊS: '
     for i in fullText:
-        if 'Manaus,' in i:
+        if 'manaus,' in i:
             temp_month = i
-            if 'Janeiro' in temp_month:
+            if 'janeiro' in temp_month:
                 month = month + '01'
                 return month
-            elif 'Fevereiro' in temp_month:
+            elif 'fevereiro' in temp_month:
                 month = month + '02'
                 return month
-            elif 'Março' in temp_month:
+            elif 'marco' in temp_month:
                 month = month + '03'
                 return month
-            elif 'Abril' in temp_month:
+            elif 'abril' in temp_month:
                 month = month + '04'
                 return month
-            elif 'Maio' in temp_month:
+            elif 'maio' in temp_month:
                 month = month + '05'
                 return month
-            elif 'Junho' in temp_month:
+            elif 'junho' in temp_month:
                 month = month + '06'
                 return month
-            elif 'Julho' in temp_month:
+            elif 'julho' in temp_month:
                 month = month + '07'
                 return month
-            elif 'Agosto' in temp_month:
+            elif 'agosto' in temp_month:
                 month = month + '08'
                 return month
-            elif 'Setembro' in temp_month:
+            elif 'setembro' in temp_month:
                 month = month + '09'
                 return month
-            elif 'Outubro' in temp_month:
+            elif 'outubro' in temp_month:
                 month = month + '10'
                 return month
-            elif 'Novembro' in temp_month:
+            elif 'novembro' in temp_month:
                 month = month + '11'
                 return month
-            elif 'Dezembro' in temp_month:
+            elif 'dezembro' in temp_month:
                 month = month + '12'
                 return month
 
@@ -216,19 +220,25 @@ def convert_year(date):
 
     #date = date.replace('.', '/')
 
-    date_temp = str(r.findall(r'/(.{2}$)', date)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+    #date_temp = str(r.findall(r'/(.{2}$)', date)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+    date_temp = date.split('/')[-1]
     date_temp = int(date_temp)
-    if date_temp <= 23:
-        complete = '20'
-        date_temp = str(date_temp)
-        date_new = complete + date_temp
-    else:
-        complete = '19'
-        date_temp = str(date_temp)
-        date_new = complete + date_temp
+    if (len(str(date_temp))) <= 2:
+        if date_temp < 10:
+            complete = '200'
+            date_temp = str(date_temp)
+            date_new = complete + date_temp
+        elif date_temp < 23:
+            complete = '20'
+            date_temp = str(date_temp)
+            date_new = complete + date_temp
+        else:
+            complete = '19'
+            date_temp = str(date_temp)
+            date_new = complete + date_temp
 
-    date = date[:-2] + date_new
-
+        date = date[:-2] + date_new
+        return (date)
     return (date)
 
 def get_companion(tables_data):
@@ -383,11 +393,11 @@ def get_specialty (dict, tables_data):
 
     return specialty
 
-def get_path(file_path, abs_path):
+def get_path(file_path):
     #get path of the project and generate a hyperlink
 
     path = 'CAMINHO: file:///'
-    path = path + str(abs_path) + '\\' + str(file_path)
+    path = path + str(file_path)
     path = path.replace("\\","/")
     return (path)
 
@@ -486,16 +496,83 @@ def get_data (wordDoc, dict, file_path, abs_path):
 
     tables_data.append(get_internment(text_data))
 
-    tables_data.append(get_path(file_path, abs_path))
+    tables_data.append(get_path(file_path))
 
     new_table = organizer(tables_data)
 
     return new_table
 
-def create_sheet (data):
+def run_automation():
+    #run the automation tool
+    abs_path = os.path.abspath(os.curdir)
+
+    files = glob.glob(abs_path + '/**/*.docx', recursive=True)
+
+    bad_files = glob.glob(abs_path + '/**/*.doc', recursive=True)
+
+    issues = 0
+    valid = 0
+
+    book = xlwt.Workbook(encoding="utf-8")
+
+    sheet1 = book.add_sheet("Sheet 1")
+
+    specs = []
+    infos = []
+
+    #all_tables_data = [[0]*(len(files))]*26
+    for file_path in range (len(files)):
+
+        temp = files[file_path].split('\\')[-1]
+    
+        if '~$' in temp[:2]:
+            issues = issues + 1
+
+        else:
+            wordDoc = Document(files[file_path])
+            tables_data = get_data(wordDoc, specialist_dict, files[file_path], abs_path)
+
+            for j in tables_data:
+                specs_temp = str(r.findall(r'(.*):', j)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+                infos_temp = str(r.findall(r':(.*)', j)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+                specs.append(specs_temp)
+                infos.append(infos_temp)
+
+            for j in range (len(tables_data)):
+                if valid == 0:
+                    sheet1.write(0, j, specs[j])
+                    sheet1.write((valid+1), j, infos[j])
+                else:
+                    sheet1.write((valid+1), j, infos[j])
+
+            del specs[:]
+            del infos[:]
+
+            valid = valid + 1
+            print('%d of ' %valid, (len(files)))
+            #for columns in range (len(tables_data)):
+            #    all_tables_data[file_path][columns] = tables_data[columns]
+
+
+
+    for file_path in range (len(bad_files)):
+        temp = bad_files[file_path].split('\\')[-1]
+        if '~$' in temp[:2]:
+            issues = issues + 1
+
+    book.save("test.xls")
+
+    print ('**********************************************************')
+    print ('there is %d docx files' %len(files))
+    print ('there is %d corrupted files!' %issues)
+    print ('there a total of %d valid files!' %valid)
+    print ('**********************************************************')
+
+    return (0)
+
+def create_sheet (data, cont):
     #this function create a sheet
     
-
     book = xlwt.Workbook(encoding="utf-8")
 
     sheet1 = book.add_sheet("Sheet 1")
@@ -514,6 +591,7 @@ def create_sheet (data):
         sheet1.write(1, i, infos[i])
 
     book.save("test.xls")
+
 
 
 #there's some dicts that are used
