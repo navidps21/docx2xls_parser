@@ -1,83 +1,11 @@
-ANO de referencia
-
-DSEI - distrito sanitário especial indigena
-(ex ARN)
-
-Nome do Paciente
-
-SEXO (F/M) *********
-
-MÊS (JUL/AGO..) *********
-
-Data de Ingresso (data com / ou com .)
-
-Data de Alta
-
-Tempo de internação (dias)
-
-DN (data de nascimento)
-
-Idade (calcular DN)
-
-COMUNIDADE
-
-POLO BASE
-
-ETNIA
-
-DESLOCAMENTO(MANAUS-BENJAMIN CONSTANT)
-
-MEIO DE TRANSPORTE(FLUVIAL EX.)
-
-PROBLEMA DE SAÚDE (descrição hd)
-
-doença negligenciada (s/n) consumir lista
-
-condição sensivel a condição primaria (s/n) consumir lista
-
-ACOMPANHANTE (S/N)
-
-unidade referenciada (onde foi atendido)
-(descrever todos os locais)
-
-situação do paciente
-
-alta provisória (s/n)
-
-problema resolvido (s/n)
-(atrelado a alta provisoria)
-
-desistencia
-
-motivo da desistencia
-
-condição na admissão
-
-condição na alta
-
-consulta (atendimento recebido) (trocar por atendimento recebido)
-
-especialista consultado (area)
-
-exame realizado (laboratorial/imagem/biopsia)
-
-internação hospitalar (s/n)
-
-data do retorno (01/01/0001)
-
-motivo do retorno
-
-
-
-
 Roadmap:
 faltam 7 funções
 faltam converter arquivos para docx!!!
-checar bugs com amostra de 2019
+checar bugs/glitches com amostra de 2019
 feedback de melhorias
 
-
-
+output da planilha
+doenca negligenciada - texto - tabela
 
 
 
@@ -88,7 +16,6 @@ feedback de melhorias
 
 condição sensivel a condição primaria (s/n) consumir lista ***
 unidade referenciada (onde foi atendido) (descrever todos os locais) ***
-consulta (atendimento recebido) (trocar por atendimento recebido)
 exame realizado (laboratorial/imagem/biopsia)***
 data do retorno (01/01/0001) (tabela cronograma de retorno)
 delta entre alta e retorno (dias)

@@ -595,7 +595,6 @@ def run_automation():
     book.save("test.xls")
 
     print ('\n**********************************************************')
-    print ('There is %d docx files' %len(files))
     print ('There is %d corrupted files!' %issues)
     print ('There is a total of %d valid files!' %valid)
     print ('**********************************************************')
@@ -685,7 +684,7 @@ specialist_dict = {
         'otorrino' : 'OTORRINOLARINGOLOGIA',
         'patolog' : 'PATOLOGIA',
         'patologia clínica/medicina laboratorial' : 'PATOLOGIA CLÍNICA/MEDICINA LABORATORIAL',
-        'pediatria' : 'PEDIATRIA',
+        'pediatr' : 'PEDIATRIA',
         'pneumolog' : 'PNEUMOLOGISTA',
         'psiquiat' : 'PSIQUIATRIA',
         'radiolog' : 'RADIOLOGIA E DIAGNÓSTICO POR IMAGEM',
