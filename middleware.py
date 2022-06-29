@@ -4,6 +4,7 @@ from datetime import *
 import re as r
 import os
 import glob
+from matplotlib.pyplot import text
 #from matplotlib.pyplot import text
 import xlwt
 
@@ -157,22 +158,51 @@ def get_gender ():
 def get_age (tables_data):
     #get age between birth and document date
 
+    age_data = 'IDADE: '
+
     for i in tables_data:
         if 'DN:' in i:
             born_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
-            born = convert_year(born_temp)
-            born = datetime.strptime(born, "%d/%m/%Y").date()
+            if (len(born_temp)) == 0:
+                indices = [i for i, s in enumerate(tables_data) if 'DN:' in s]
+                tables_data.insert(indices[0]+10, age_data)
+                return (tables_data)
+            else:    
+                born = convert_year(born_temp)
+                born = datetime.strptime(born, "%d/%m/%Y").date()
         if 'DATA DO INGRESSO:' in i:
             today_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
             today = convert_year(today_temp)
             today = datetime.strptime(today, "%d/%m/%Y").date()
+
     age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
-    age_data = 'IDADE: '
+    
     age_data = age_data + str(age)
     
     indices = [i for i, s in enumerate(tables_data) if 'DN:' in s]
     tables_data.insert(indices[0]+10, age_data)
+
+    return (tables_data)
+
+def get_entrydate (tables_data, text_data):
+    #print(tables_data)
+    #print(lowercase_text(text_data))
+
+    new_text = (lowercase_text(text_data))
+
+    new_entry = 'DATA DO INGRESSO: '
+
+    for i in range (len(tables_data)):
+        if 'DATA DO INGRESSO:' in tables_data[i]:
+            start_temp = str(r.findall(r':(.*)', tables_data[i])).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+            if (len(start_temp)) == 0:
+                for j in new_text:
+                    if j[0].isdigit():
+                        new_entry = new_entry + j[:10]
+                        new_entry = new_entry.replace('.','/')
+                        tables_data[i] = new_entry
+                        return (tables_data)
 
     return (tables_data)
 
@@ -221,6 +251,7 @@ def convert_year(date):
     #date = date.replace('.', '/')
 
     #date_temp = str(r.findall(r'/(.{2}$)', date)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+    date = date.replace(' ', '')
     date_temp = date.split('/')[-1]
     date_temp = int(date_temp)
     if (len(str(date_temp))) <= 2:
@@ -365,6 +396,8 @@ def get_conditition (text_data):
     
     pacientcond = 'SITUAÇÃO DO PACIENTE: '
 
+    #print(text_data)
+
     cont = []
 
     for i in text_data:
@@ -384,21 +417,35 @@ def get_conditition (text_data):
             indice_5 = [i for i, s in enumerate(text_data) if 'REGISTRO DE INTERVENÇÕES' in s]
             cont.append(indice_5[0])
 
+    if (len(cont)) == 0:
+
+        for i in text_data:
+            if 'OBS:' in i:
+                indice_extra = [i for i, s in enumerate(text_data) if 'OBS:' in s]
+        cont.append(indice_extra[0]-1)
+
     indice = max(cont)
 
     pacientcond = pacientcond + str(text_data[indice+1:])
 
-    return(pacientcond.replace('OBS:', 'OBS.').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
+    return(pacientcond.replace('OBS:', 'OBS.').replace('\\t', '').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
 
-def get_specialty (dict, tables_data):
+def get_specialty (dict, tables_data, text_data):
 
     new_table = lowercase_table(tables_data)
+
+    new_text = lowercase_text(text_data)
 
     #print(new_table)
 
     specialty = 'ESPECIALIDADES: '
 
     for i in new_table:
+        for j in dict:
+            if j in i:
+                if specialty.find(str(dict[j])) == -1 :
+                    specialty = specialty + str(dict[j]) + '; '
+    for i in new_text:
         for j in dict:
             if j in i:
                 if specialty.find(str(dict[j])) == -1 :
@@ -476,7 +523,7 @@ def organizer (tables_data):
             new_table[27] = i
     return new_table
 
-def get_data (wordDoc, dict, file_path, abs_path):
+def get_data (wordDoc, dict, file_path):
     #generate tables_data
     
     tables_data = get_tables_data(wordDoc)
@@ -491,11 +538,13 @@ def get_data (wordDoc, dict, file_path, abs_path):
 
     tables_data.insert(2, get_gender())
 
+    tables_data = get_entrydate(tables_data, text_data)
+
     tables_data = get_age(tables_data)
 
     tables_data = get_time(tables_data)
 
-    tables_data.append(get_specialty(dict, raw_tables_data))
+    tables_data.append(get_specialty(dict, raw_tables_data, text_data))
 
     tables_data.append(get_companion(tables_data))
 
@@ -529,6 +578,7 @@ def run_automation():
 
     issues = 0
     valid = 0
+    invalid = 0
 
     book = xlwt.Workbook(encoding="utf-8")
 
@@ -549,10 +599,13 @@ def run_automation():
     
         if '~$' in temp[:2]:
             issues = issues + 1
+        if '$~' in temp[:2]:
+            invalid = invalid + 1
 
         else:
             wordDoc = Document(files[file_path])
-            tables_data = get_data(wordDoc, specialist_dict, files[file_path], abs_path)
+            print(files[file_path])
+            tables_data = get_data(wordDoc, specialist_dict, files[file_path])
 
             for j in tables_data:
                 specs_temp = str(r.findall(r'(.*):', j)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
@@ -579,6 +632,8 @@ def run_automation():
         temp = bad_files[file_path].split('\\')[-1]
         if '~$' in temp[:2]:
             issues = issues + 1
+        if '$~' in temp[:2]:
+            invalid = invalid + 1
 
     sheet1.col(0).width = 1400
     sheet1.col(1).width = 1400
@@ -596,12 +651,13 @@ def run_automation():
 
     print ('\n**********************************************************')
     print ('There is %d corrupted files!' %issues)
+    print ('There is %d invalid files!' %invalid)
     print ('There is a total of %d valid files!' %valid)
     print ('**********************************************************')
 
     return (0)
 
-def create_sheet (data, cont):
+def create_sheet (data):
     #this function create a sheet
     
     book = xlwt.Workbook(encoding="utf-8")
@@ -684,7 +740,7 @@ specialist_dict = {
         'otorrino' : 'OTORRINOLARINGOLOGIA',
         'patolog' : 'PATOLOGIA',
         'patologia clínica/medicina laboratorial' : 'PATOLOGIA CLÍNICA/MEDICINA LABORATORIAL',
-        'pediatr' : 'PEDIATRIA',
+        'pediatria' : 'PEDIATRIA',
         'pneumolog' : 'PNEUMOLOGISTA',
         'psiquiat' : 'PSIQUIATRIA',
         'radiolog' : 'RADIOLOGIA E DIAGNÓSTICO POR IMAGEM',
