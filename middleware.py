@@ -266,7 +266,7 @@ def convert_year(date):
     #date = date.replace('.', '/')
 
     #date_temp = str(r.findall(r'/(.{2}$)', date)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
-    date = date.replace(' ', '')
+    date = date.replace(' ', '').replace(';','/')
     date_temp = date.split('/')[-1]
     date_temp = int(date_temp)
     if (len(str(date_temp))) <= 2:
