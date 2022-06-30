@@ -4,7 +4,6 @@ from datetime import *
 import re as r
 import os
 import glob
-from matplotlib.pyplot import text
 #from matplotlib.pyplot import text
 import xlwt
 
@@ -98,12 +97,28 @@ def lowercase_table (tables_data):
 def get_year (fullText):
     #get the year of the document
 
-    for i in fullText:
-        if 'Manaus,' in i:
+    new_text = lowercase_text(fullText)
+
+    label = 'ANO: '
+
+    for i in new_text:
+        if 'manaus' in i[:10]:
             temp_year = i
             year = r.search(r"\d{4}", temp_year).group(0)
-            label = 'ANO: '
             return (label + year)
+
+        #elif i[0].isdigit():
+        #    temp_year = i
+        #    year = r.search(r"\d{4}", temp_year).group(0)
+        #    return (label + year)
+
+    for i in range (len(new_text)):
+        j = new_text[i].replace(' ', '')
+        if 'manaus' in j[:10]:
+            temp_year = j
+            year = r.search(r"\d{4}", temp_year).group(0)
+            return (label + year)
+
 
 def get_month (fullText):
     #get the month of the document
@@ -112,7 +127,7 @@ def get_month (fullText):
 
     month = 'MÊS: '
     for i in fullText:
-        if 'manaus,' in i:
+        if 'manaus' in i:
             temp_month = i
             if 'janeiro' in temp_month:
                 month = month + '01'
@@ -277,7 +292,7 @@ def get_companion(tables_data):
 
     companion = 'ACOMPANHANTE: '
     for i in tables_data:
-        if 'NOME DO ACOMPANHANTE:' in i:
+        if 'ACOMPANHANT' in i:
             companion_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
             if len(companion_temp) >= 5:
                 companion = companion + "S"
@@ -286,7 +301,7 @@ def get_companion(tables_data):
                 companion = companion + "N"
                 return companion
 
-def get_neglecteddiseases (text_data):
+def get_neglecteddiseases (tables_data, text_data):
 
     neglecteddiseases = [
         'malaria',
@@ -305,13 +320,25 @@ def get_neglecteddiseases (text_data):
 
     new_text = lowercase_text(text_data)
 
+    new_table = lowercase_table(tables_data)
+
     neglected = 'DOENÇA NEGLIGENCIADA: '
 
-    for i in new_text:
-        for j in neglecteddiseases:
+    for j in neglecteddiseases:
+        for i in new_text:
             if j in i:
                 neglected = neglected + 'S'
                 return (neglected)
+        for i in new_table:
+            if j in i:
+                neglected = neglected + 'S'
+                return (neglected)
+
+    #for i in new_text:
+    #    for j in neglecteddiseases:
+    #        if j in i:
+    #            neglected = neglected + 'S'
+    #            return (neglected)
     
     neglected = neglected + 'N'
     return (neglected)
@@ -418,11 +445,16 @@ def get_conditition (text_data):
             cont.append(indice_5[0])
 
     if (len(cont)) == 0:
-
         for i in text_data:
             if 'OBS:' in i:
                 indice_extra = [i for i, s in enumerate(text_data) if 'OBS:' in s]
-        cont.append(indice_extra[0]-1)
+                cont.append(indice_extra[0]-1)
+
+        if (len(cont)) == 0:
+            for i in text_data:
+                if 'RELATÓRIO DE CONTRA' in i:
+                    indice_extra = [i for i, s in enumerate(text_data) if 'RELATÓRIO DE CONTRA' in s]
+                    cont.append(indice_extra[0])
 
     indice = max(cont)
 
@@ -556,7 +588,7 @@ def get_data (wordDoc, dict, file_path):
 
     tables_data = get_problemsolved(tables_data)
 
-    tables_data.append(get_neglecteddiseases(text_data))
+    tables_data.append(get_neglecteddiseases(tables_data, text_data))
 
     tables_data.append(get_conditition(text_data))
 
@@ -604,7 +636,7 @@ def run_automation():
 
         else:
             wordDoc = Document(files[file_path])
-            print(files[file_path])
+            #print(files[file_path])
             tables_data = get_data(wordDoc, specialist_dict, files[file_path])
 
             for j in tables_data:
@@ -647,7 +679,12 @@ def run_automation():
     sheet1.col(9).width = 2600
     sheet1.col(10).width = 2600
 
-    book.save("test.xls")
+    now = datetime.now()
+    dt_string = now.strftime("%d%m%Y_%H%M%S")
+
+    book.save("output_" + dt_string + ".xls")
+    
+    #book.save("test.xls")
 
     print ('\n**********************************************************')
     print ('There is %d corrupted files!' %issues)

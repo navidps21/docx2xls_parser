@@ -1,11 +1,7 @@
 Roadmap:
-faltam 7 funções
+faltam 6 funções
 faltam converter arquivos para docx!!!
-checar bugs/glitches com amostra de 2019
-feedback de melhorias
-
-output da planilha
-doenca negligenciada - texto - tabela
+melhorar get_entrydate para suportar DD.MM.YY
 
 
 
