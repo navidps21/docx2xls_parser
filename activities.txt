@@ -1,7 +1,8 @@
 Roadmap:
-faltam 6 funções
-faltam converter arquivos para docx!!!
+faltam 5 funções
+faltam converter arquivos de 2018 para docx!!!
 melhorar get_entrydate para suportar DD.MM.YY
+perguntar 'outras tuberculoses' e 'anemias' 'bronquite' 'hipertensao' 'doença cerebrovascular' 'diabetes'
 
 
 
@@ -10,7 +11,7 @@ melhorar get_entrydate para suportar DD.MM.YY
 
 
 
-condição sensivel a condição primaria (s/n) consumir lista ***
+
 unidade referenciada (onde foi atendido) (descrever todos os locais) ***
 exame realizado (laboratorial/imagem/biopsia)***
 data do retorno (01/01/0001) (tabela cronograma de retorno)
@@ -38,10 +39,11 @@ COMUNIDADE
 ETNIA
 MEIO DE TRANSPORTE (FLUVIAL EX.)
 DESLOCAMENTO(BENJAMIN CONSTANT)
-***PROBLEMA DE SAÚDE (descrição hd)
+PROBLEMA DE SAÚDE (descrição hd)
 situação do paciente (paragrafos apos ultima tabela)
 ***ACOMPANHANTE (S/N)
 ***doença negligenciada (s/n) consumir lista
+***condição sensivel a condição primaria (s/n) consumir lista
 alta provisória (s/n) (obs: info)
 problema resolvido (s/n) (atrelado a alta provisoria == n)
 desistencia (s/n)
@@ -62,12 +64,6 @@ MP
 MS
 PAR
 VRJ
-
-
-
-ANO
-
-2018
 
 
 

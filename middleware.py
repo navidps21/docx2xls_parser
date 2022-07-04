@@ -4,7 +4,6 @@ from datetime import *
 import re as r
 import os
 import glob
-#from matplotlib.pyplot import text
 import xlwt
 
 
@@ -64,6 +63,7 @@ def get_tables_data (wordDoc):
 
     #for i in data:
     #    print(i)
+    #print(data)
     
     return (data)
 
@@ -118,7 +118,6 @@ def get_year (fullText):
             temp_year = j
             year = r.search(r"\d{4}", temp_year).group(0)
             return (label + year)
-
 
 def get_month (fullText):
     #get the month of the document
@@ -343,6 +342,28 @@ def get_neglecteddiseases (tables_data, text_data):
     neglected = neglected + 'N'
     return (neglected)
 
+def get_conditionsensitive (dict, tables_data, text_data):
+
+    new_text = lowercase_text(text_data)
+
+    new_table = lowercase_table(tables_data)
+
+    conditionsensitive = 'DOENÇA SENSÍVEL À CONDIÇÃO PRIMÁRIA: '
+
+    for i in new_table:
+        for j in dict:
+            if j in i:
+                conditionsensitive = conditionsensitive + 'S'
+                return (conditionsensitive)
+    for i in new_text:
+        for j in dict:
+            if j in i:
+                conditionsensitive = conditionsensitive + 'S'
+                return (conditionsensitive)
+    
+    conditionsensitive = conditionsensitive + 'N'
+    return (conditionsensitive)
+
 def get_giveup(text_data):
     #this function return if pacient give up or not
     giveup = 'DESISTÊNCIA: '
@@ -495,7 +516,10 @@ def get_path(file_path):
 
 def organizer (tables_data):
     #organize the table
-    new_table = ['s'] * 28
+
+    #print(tables_data)
+
+    new_table = ['s'] * 29
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -543,19 +567,21 @@ def organizer (tables_data):
             new_table[21] = i
         elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[22] = i
-        elif 'SITUAÇÃO DO PACIENTE:' in i:
+        elif 'DOENÇA SENSÍVEL' in i:
             new_table[23] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[24] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[25] = i
-        if 'MOTIVO DESIST:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[26] = i
-        elif 'CAMINHO:' in i:
+        if 'MOTIVO DESIST:' in i:
             new_table[27] = i
+        elif 'CAMINHO:' in i:
+            new_table[28] = i
     return new_table
 
-def get_data (wordDoc, dict, file_path):
+def get_data (wordDoc, spec_dict, sencond_dict, file_path):
     #generate tables_data
     
     tables_data = get_tables_data(wordDoc)
@@ -576,7 +602,7 @@ def get_data (wordDoc, dict, file_path):
 
     tables_data = get_time(tables_data)
 
-    tables_data.append(get_specialty(dict, raw_tables_data, text_data))
+    tables_data.append(get_specialty(spec_dict, raw_tables_data, text_data))
 
     tables_data.append(get_companion(tables_data))
 
@@ -589,6 +615,8 @@ def get_data (wordDoc, dict, file_path):
     tables_data = get_problemsolved(tables_data)
 
     tables_data.append(get_neglecteddiseases(tables_data, text_data))
+
+    tables_data.append(get_conditionsensitive(sencond_dict, tables_data, text_data))
 
     tables_data.append(get_conditition(text_data))
 
@@ -637,7 +665,7 @@ def run_automation():
         else:
             wordDoc = Document(files[file_path])
             #print(files[file_path])
-            tables_data = get_data(wordDoc, specialist_dict, files[file_path])
+            tables_data = get_data(wordDoc, specialist_dict, conditionsensitive_dict, files[file_path])
 
             for j in tables_data:
                 specs_temp = str(r.findall(r'(.*):', j)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
@@ -799,4 +827,55 @@ neglecteddiseases_dict = {
     'tracoma' : 'TRACOMA',
     'helmintos' : 'HELMINTOS',
     'nematoides de solo' : 'NEMATÓIDES DE SOLO'
+}
+
+conditionsensitive_dict = {
+    'coqueluche' : 'COQUELUCHE',
+    'difteria' : 'DIFTERIA',
+    'tetano' : 'TÉTANO',
+    'parotidite' : 'PAROTIDITE',
+    'rubeola' : 'RUBÉOLA',
+    'sarampo' : 'SARAMPO',
+    'febre amarela' : 'FEBRE AMARELA',
+    'hepatite b' : 'HEPATITE B',
+    'meningite por haemophilus' : 'MENINGITE POR HAEMOPHILUS',
+    'meningite tuberculosa' : 'MENINGITE TUBERCULOSA',
+    'tuberculose miliar' : 'TUBERCULOSE MILIAR',
+    'tuberculose pulmonar' : 'TUBERCULOSE PULMONAR',
+    'tuberculose' : 'TUBERCULOSE',
+    'febre reumatica' : 'FEBRE REUMÁTICA',
+    'sifilis' : 'SÍFILIS',
+    'malaria' : 'MALÁRIA',
+    'ascaridiase' : 'ASCARIDÍASE',
+    'desidratacao' : 'DESIDRATAÇÃO',
+    'gastroenterite' : 'GASTROENTERITE',
+    'anemia' : 'ANEMIA',
+    'otite media supurativa' : 'OTITE MÉDIA SUPURATIVA',
+    'nasofaringite aguda' : 'RESFRIADO COMUM',
+    'resfriado' : 'RESFRIADO COMUM',
+    'sinusite aguda' : 'SINUSITE AGUDA',
+    'faringite aguda' : 'FARINGITE AGUDA',
+    'amigdalite aguda' : 'AMIGDALITE AGUDA',
+    'infeccao aguda vas' : 'INFECÇÃO AGUDA VAS',
+    'rinite cronica' : 'RINITE CRÔNICA',
+    'nasofaringite cronica' : 'NASOFARINGITE CRÔNICA',
+    'faringite cronica' : 'FARINGITE CRÔNICA',
+    'pneumonia pneumococica' : 'PNEUMONIA PNEUMOCÓCICA',
+    'pneumonia por haemophilus infuenzae' : 'PNEUMONIA POR HAEMOPHILUS INFUENZAE',
+    'pneumonia por streptococus' : 'PNEUMONIA POR STREPTOCOCUS',
+    'pneumonia bacteriana' : 'PNEUMONIA BACTERIANA NE',
+    'pneumonia lobar' : 'PNEUMONIA LOBAR NE',
+    'asma' : 'ASMA',
+    'bronquite' : 'BRONQUITE',
+    'enfisema' : 'ENFISEMA',
+    'bronquectasia' : 'BRONQUECTASIA',
+    'doenca pulmonar' : 'DOENÇAS PULMONARES OBSTRUTIVAS CRÔNICAS',
+    'hipertensao essencial' : 'HIPERTENSÃO ESSENCIAL',
+    'doenca cardiaca hipertensiva' : 'DOENÇA CARDÍACA HIPERTENSIVA',
+    'angina pectoris' : 'ANGINA PECTORIS',
+    'insuficiencia cardiaca' : 'INSUFICIÊNCIA CARDÍACA',
+    'edema agudo de pulmao' : 'EDEMA AGUDO DE PULMÃO',
+    'doenca cerebrovascular' : 'DOENÇA CEREBROVASCULAR',
+    'diabetes melitus' : 'DIABETES MELITUS',
+    'eplepsia' : 'EPLEPSIA'
 }
