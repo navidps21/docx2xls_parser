@@ -9,7 +9,6 @@ import xlwt
 
 def get_raw_tables_data (wordDoc):
     raw_data = []
-    data = []
 
     for table in wordDoc.tables:
         for row in table.rows:
@@ -213,7 +212,12 @@ def get_entrydate (tables_data, text_data):
             if (len(start_temp)) == 0:
                 for j in new_text:
                     if j[0].isdigit():
-                        new_entry = new_entry + j[:10]
+                        #new_entry = new_entry + j[:10]
+                        #new_entry = new_entry.replace('.','/')
+                        entry = r.findall(r"\d{2}[./]\d{2}[./]\d{4}", j[:10])
+                        if not entry:
+                            entry = r.findall(r"\d{2}[./]\d{2}[./]\d{2}", j[:8])
+                        new_entry = new_entry + entry[0]
                         new_entry = new_entry.replace('.','/')
                         tables_data[i] = new_entry
                         return (tables_data)
@@ -364,6 +368,29 @@ def get_conditionsensitive (dict, tables_data, text_data):
     conditionsensitive = conditionsensitive + 'N'
     return (conditionsensitive)
 
+def get_conditionsensitive_reason (dict, tables_data, text_data):
+
+    new_table = lowercase_table(tables_data)
+
+    new_text = lowercase_text(text_data)
+
+    #print(new_table)
+
+    conditionsensitive_reason = 'MOTIVO DOENÇA DE CONDIÇÃO PRIMÁRIA: '
+
+    for i in new_table:
+        for j in dict:
+            if j in i:
+                if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+    for i in new_text:
+        for j in dict:
+            if j in i:
+                if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+
+    return conditionsensitive_reason
+
 def get_giveup(text_data):
     #this function return if pacient give up or not
     giveup = 'DESISTÊNCIA: '
@@ -404,6 +431,29 @@ def get_internment(text_data):
 
     internment = internment + "N"
     return internment
+
+def get_referencedunit (dict, tables_data, text_data):
+
+    new_table = lowercase_table(tables_data)
+
+    new_text = lowercase_text(text_data)
+
+    #print(new_table)
+
+    referencedunit = 'UNIDADE REFERENCIADA: '
+
+    for i in new_table:
+        for j in dict:
+            if j in i:
+                if referencedunit.find(str(dict[j])) == -1 :
+                    referencedunit = referencedunit + str(dict[j]) + '; '
+    for i in new_text:
+        for j in dict:
+            if j in i:
+                if referencedunit.find(str(dict[j])) == -1 :
+                    referencedunit = referencedunit + str(dict[j]) + '; '
+
+    return referencedunit
 
 def get_provdischarge (text_data):
     #this functions return if pacient had a provisional discharge
@@ -514,12 +564,35 @@ def get_path(file_path):
     path = path.replace("\\","/")
     return (path)
 
+def get_outputlog (list, issues, invalid, valid):
+
+    f= open("output_log.txt","w+")
+
+    f.write ('**********************************************************\r')
+    f.write ('\nvalid files: (%d file(s))\n\r' %valid)
+
+    f.write ('**********************************************************\r')
+    f.write ('\nlist of corrupted files: (%d file(s))\n\r' %issues)
+
+    for i in range (len(list)):
+        if '~$' in list[i]:
+            f.write ("%s\r" % list[i])
+
+    f.write ('\n**********************************************************\r')
+    f.write ('\nlist of invalid files: (%d file(s))\n\r' %invalid)
+
+    for i in range (len(list)):
+        if '$~' in list[i]:
+            f.write ("%s\r" % list[i])
+
+    f.close()
+
 def organizer (tables_data):
     #organize the table
 
     #print(tables_data)
 
-    new_table = ['s'] * 29
+    new_table = ['s'] * 31
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -555,33 +628,37 @@ def organizer (tables_data):
             new_table[15] = i
         elif 'INTERNAÇÃO HOSPITALAR:' in i:
             new_table[16] = i
-        elif 'DESLOCAMENTO:' in i:
+        elif 'UNIDADE REFERENCIADA:' in i:
             new_table[17] = i
-        elif 'PARA:' in i:
+        elif 'DESLOCAMENTO:' in i:
             new_table[18] = i
-        elif 'MEIO DE TRANSPORTE:' in i:
+        elif 'PARA:' in i:
             new_table[19] = i
-        elif 'ACOMPANHANTE:' in i:
+        elif 'MEIO DE TRANSPORTE:' in i:
             new_table[20] = i
-        elif 'ALTA PROVISÓRIA:' in i:
+        elif 'ACOMPANHANTE:' in i:
             new_table[21] = i
-        elif 'DOENÇA NEGLIGENCIADA:' in i:
+        elif 'ALTA PROVISÓRIA:' in i:
             new_table[22] = i
-        elif 'DOENÇA SENSÍVEL' in i:
+        elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[23] = i
-        elif 'SITUAÇÃO DO PACIENTE:' in i:
+        elif 'DOENÇA SENSÍVEL' in i:
             new_table[24] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'MOTIVO DOENÇA DE CONDI' in i:
             new_table[25] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[26] = i
-        if 'MOTIVO DESIST:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[27] = i
-        elif 'CAMINHO:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[28] = i
+        if 'MOTIVO DESIST:' in i:
+            new_table[29] = i
+        elif 'CAMINHO:' in i:
+            new_table[30] = i
     return new_table
 
-def get_data (wordDoc, spec_dict, sencond_dict, file_path):
+def get_data (wordDoc, spec_dict, sensitive_dict, hospital_dict , file_path):
     #generate tables_data
     
     tables_data = get_tables_data(wordDoc)
@@ -616,11 +693,15 @@ def get_data (wordDoc, spec_dict, sencond_dict, file_path):
 
     tables_data.append(get_neglecteddiseases(tables_data, text_data))
 
-    tables_data.append(get_conditionsensitive(sencond_dict, tables_data, text_data))
+    tables_data.append(get_conditionsensitive(sensitive_dict, tables_data, text_data))
+
+    tables_data.append(get_conditionsensitive_reason(sensitive_dict, tables_data, text_data))
 
     tables_data.append(get_conditition(text_data))
 
     tables_data.append(get_internment(text_data))
+
+    tables_data.append(get_referencedunit(hospital_dict, tables_data, text_data))
 
     tables_data.append(get_path(file_path))
 
@@ -665,7 +746,7 @@ def run_automation():
         else:
             wordDoc = Document(files[file_path])
             #print(files[file_path])
-            tables_data = get_data(wordDoc, specialist_dict, conditionsensitive_dict, files[file_path])
+            tables_data = get_data(wordDoc, specialist_dict, conditionsensitive_dict, hospital_dict, files[file_path])
 
             for j in tables_data:
                 specs_temp = str(r.findall(r'(.*):', j)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
@@ -684,6 +765,9 @@ def run_automation():
             del infos[:]
 
             valid = valid + 1
+            
+            os.system('cls')
+
             print('%d of ' %valid, (len(files)))
             #for columns in range (len(tables_data)):
             #    all_tables_data[file_path][columns] = tables_data[columns]
@@ -712,6 +796,12 @@ def run_automation():
 
     book.save("output_" + dt_string + ".xls")
     
+    list = []
+    list = files
+    list.extend(bad_files)
+
+    get_outputlog(list, issues, invalid, valid)
+
     #book.save("test.xls")
 
     print ('\n**********************************************************')
@@ -830,6 +920,7 @@ neglecteddiseases_dict = {
 }
 
 conditionsensitive_dict = {
+
     'coqueluche' : 'COQUELUCHE',
     'difteria' : 'DIFTERIA',
     'tetano' : 'TÉTANO',
@@ -840,32 +931,41 @@ conditionsensitive_dict = {
     'hepatite b' : 'HEPATITE B',
     'meningite por haemophilus' : 'MENINGITE POR HAEMOPHILUS',
     'meningite tuberculosa' : 'MENINGITE TUBERCULOSA',
+    'meningite' : 'MENINGITE',
     'tuberculose miliar' : 'TUBERCULOSE MILIAR',
     'tuberculose pulmonar' : 'TUBERCULOSE PULMONAR',
     'tuberculose' : 'TUBERCULOSE',
+    'tb' : 'TUBERCULOSE',
     'febre reumatica' : 'FEBRE REUMÁTICA',
+    'sifilis congenita' : 'SÍFILIS CONGÊNITA',
     'sifilis' : 'SÍFILIS',
     'malaria' : 'MALÁRIA',
     'ascaridiase' : 'ASCARIDÍASE',
     'desidratacao' : 'DESIDRATAÇÃO',
     'gastroenterite' : 'GASTROENTERITE',
+    'anemia por deficiencia de ferro' : 'ANEMIA POR DEFICIÊNCIA DE FERRO',
     'anemia' : 'ANEMIA',
     'otite media supurativa' : 'OTITE MÉDIA SUPURATIVA',
     'nasofaringite aguda' : 'RESFRIADO COMUM',
     'resfriado' : 'RESFRIADO COMUM',
     'sinusite aguda' : 'SINUSITE AGUDA',
+    'sinusite' : 'SINUSITE',
     'faringite aguda' : 'FARINGITE AGUDA',
     'amigdalite aguda' : 'AMIGDALITE AGUDA',
     'infeccao aguda vas' : 'INFECÇÃO AGUDA VAS',
-    'rinite cronica' : 'RINITE CRÔNICA',
+    'rinite' : 'RINITE',    
     'nasofaringite cronica' : 'NASOFARINGITE CRÔNICA',
     'faringite cronica' : 'FARINGITE CRÔNICA',
+    'faringite' : 'FARINGITE',
     'pneumonia pneumococica' : 'PNEUMONIA PNEUMOCÓCICA',
     'pneumonia por haemophilus infuenzae' : 'PNEUMONIA POR HAEMOPHILUS INFUENZAE',
     'pneumonia por streptococus' : 'PNEUMONIA POR STREPTOCOCUS',
     'pneumonia bacteriana' : 'PNEUMONIA BACTERIANA NE',
     'pneumonia lobar' : 'PNEUMONIA LOBAR NE',
+    'pneumonia' : 'PNEUMONIA',
     'asma' : 'ASMA',
+    'bronquite aguda' : 'BRONQUITE AGUDA',
+    'bronquite cronica' : 'BRONQUITE CRÔNICA',
     'bronquite' : 'BRONQUITE',
     'enfisema' : 'ENFISEMA',
     'bronquectasia' : 'BRONQUECTASIA',
@@ -877,5 +977,121 @@ conditionsensitive_dict = {
     'edema agudo de pulmao' : 'EDEMA AGUDO DE PULMÃO',
     'doenca cerebrovascular' : 'DOENÇA CEREBROVASCULAR',
     'diabetes melitus' : 'DIABETES MELITUS',
-    'eplepsia' : 'EPLEPSIA'
+    'cistite' : 'EPILEPSIA',
+    'nefrite tubulo-intersticial aguda' : 'NEFRITE TÚBULO-INTERSTICIAL AGUDA',
+    'nefrite tubulo-intersticial cronica' : 'NEFRITE TÚBULO-INTERSTICIAL CRÔNICA',
+    'nefrite tubulo-intersticial ne aguda' : 'NEFRITE TÚBULO-INTERSTICIAL NE AGUDA CRÔNICA',
+    'cistite' : 'CISTITE',
+    'uretrite' : 'URETRITE',
+    'infeccao do trato urinario' : 'INFECÇÃO DO TRATO URINÁRIO',
+    'infecção no trato urinario na gravidez' : 'INFECÇÃO NO TRATO URINÁRIO NA GRAVIDEZ',
+    'infeccao urina' : 'INFECÇÃO URINÁRIA',
+    'erisipela' : 'ERISIPELA',
+    'impetigo' : 'IMPETIGO',
+    'abscesso cutaneo' : 'ABSCESSO CUTÂNEO',
+    'abscesso' : 'ABSCESSO',
+    'furunculo' : 'FURÚNCULO',
+    'carbunculo' : 'CARBÚNCULO',
+    'celulite' : 'CELULITE',
+    'linfadenite aguda' : 'LINFADENITE AGUDA',
+    'salpingite' : 'SALPINGITE',
+    'doenca inflamatoria do utero' : 'OOFORITE',
+    'doencas da glandula de bartholin' : 'DOENÇAS DA GLÂNDULA DE BARTHOLIN',
+    'ulcera gastrointestinal' : 'ÚLCERA GASTROINTESTINAL',
+    'sindrome da rubeola congenita' : 'SÍNDROME DA RUBÉOLA CONGÊNITA'
+}
+
+hospital_dict = {
+    'spa e policlinica dr. danilo correa' : 'SPA E POLICLÍNICA DR. DANILO CORRÊA',
+    'policlinica dr. danilo correa' : 'SPA E POLICLÍNICA DR. DANILO CORRÊA',
+    'spa dr. danilo correa' : 'SPA E POLICLÍNICA DR. DANILO CORRÊA',
+    'spa danilo correa' : 'SPA E POLICLÍNICA DR. DANILO CORRÊA',
+    'policlinica codajas' : 'POLICLÍNICA CODAJÁS',
+    'fundacao hospital do coracao francisca mendes' : 'FUNDAÇÃO HOSPITAL DO CORAÇÃO FRANCISCA MENDES',
+    'francisca mendes' : 'FUNDAÇÃO HOSPITAL DO CORAÇÃO FRANCISCA MENDES',
+    'caic moura tapajos' : 'CAIC MOURA TAPAJÓS',
+    'caic dr. jose contente' : 'CAIC DR. JOSÉ CONTENTE',
+    'spa zona sul' : 'SPA ZONA SUL',
+    'caic ana maria dos santos pereira braga' : 'CAIC ANA MARIA DOS SANTOS PEREIRA BRAGA',
+    'hospital psiquiatrico eduardo ribeiro' : 'HOSPITAL PSIQUIÁTRICO EDUARDO RIBEIRO',
+    'policlinica antônio aleixo' : 'POLICLÍNICA ANTÔNIO ALEIXO',
+    'instituto de saude da crianca do amazonas' : 'INSTITUTO DE SAÚDE DA CRIANÇA DO AMAZONAS – ICAM',
+    'icam' : 'INSTITUTO DE SAÚDE DA CRIANÇA DO AMAZONAS – ICAM',
+    'hospital geral dr. geraldo da rocha' : 'HOSPITAL GERAL DR. GERALDO DA ROCHA',
+    'hospital e maternidade chapot prevost' : 'HOSPITAL E MATERNIDADE CHAPOT PREVOST',
+    'hps dr. joao lucio pereira machado' : 'HPS - DR. JOÃO LÚCIO PEREIRA MACHADO',
+    'hps joao lucio' : 'HPS - DR. JOÃO LÚCIO PEREIRA MACHADO',
+    'hps dr. aristoteles platao bezerra de araujo' : 'HPS - DR. ARISTÓTELES PLATÃO BEZERRA DE ARAÚJO',
+    'hps platao' : 'HPS - DR. ARISTÓTELES PLATÃO BEZERRA DE ARAÚJO',
+    'hps da crianca - zona sul' : 'HPS DA CRIANÇA - ZONA SUL',
+    'caimi andre araujo' : 'CAIMI ANDRÉ ARAÚJO',
+    'caimi paulo lima' : 'CAIMI PAULO LIMA',
+    'maternidade estadual balbina mestrinho' : 'MATERNIDADE ESTADUAL BALBINA MESTRINHO',
+    'maternidade azilda da silva marreiro' : 'MATERNIDADE AZILDA DA SILVA MARREIRO',
+    'spa enfermeira eliameme rodrigues mady' : 'SPA ENFERMEIRA ELIAMEME RODRIGUES MADY',
+    'spa coroado' : 'SPA COROADO',
+    'caic dra. maria helena freitas de goes' : 'CAIC DRA. MARIA HELENA FREITAS DE GÓES',
+    'caic dr. gilson moreira' : 'CAIC DR. GILSON MOREIRA',
+    'caic dr. rubim de sa' : 'CAIC DR. RUBIM DE SÁ',
+    'caic jose carlos mestrinho' : 'CAIC JOSÉ CARLOS MESTRINHO',
+    'caic dr. edson melo' : 'CAIC DR. EDSON MELO',
+    'caic dr. afrânio soares' : 'CAIC DR. AFRÂNIO SOARES',
+    'caic alberto carreira' : 'CAIC ALBERTO CARREIRA',
+    'spa sao raimundo' : 'SPA SÃO RAIMUNDO',
+    'caic dra. josephina de mello' : 'CAIC ALEXANDRE MONTORIL',
+    'maternidade cidade nova dona nazira daou' : 'MATERNIDADE CIDADE NOVA DONA NAZIRA DAOU',
+    'spa joventina dias' : 'SPA JOVENTINA DIAS',
+    'centro de atencao psicossocial silverio tundis' : 'CENTRO DE ATENÇÃO PSICOSSOCIAL SILVÉRIO TUNDIS',
+    'hospital infantil dr. fajardo' : 'HOSPITAL INFANTIL DR. FAJARDO',
+    'policlinica cardoso fontes' : 'POLICLÍNICA CARDOSO FONTES',
+    'cema' : 'CEMA',
+    'lacen' : 'LABORATÓRIO CENTRAL',
+    'laboratorio central' : 'LABORATÓRIO CENTRAL',
+    'spa e policlinica dr. jose de jesus lins de albuquerque' : 'SPA E POLICLÍNICA DR. JOSÉ DE JESUS LINS DE ALBUQUERQUE',
+    'caic alexandre montoril' : 'CAIC ALEXANDRE MONTORIL',
+    'caimi ada rodrigues viana' : 'CAIMI ADA RODRIGUES VIANA',
+    'cepra' : 'CEPRA',
+    'maternidade alvorada' : 'MATERNIDADE ALVORADA',
+    'maternidade ana braga' : 'MATERNIDADE ANA BRAGA',
+    'fundacao de hematologia e hemoterapia do amazonas' : 'FUNDAÇÃO DE HEMATOLOGIA E HEMOTERAPIA DO AMAZONAS - FHEMOAM',
+    'fhemoam' : 'FUNDAÇÃO DE HEMATOLOGIA E HEMOTERAPIA DO AMAZONAS - FHEMOAM',
+    'spa alvorada' : 'SPA ALVORADA',
+    'policlinica zeno lanzini' : 'POLICLÍNICA ZENO LANZINI',
+    'policlinica joao dos santos braga' : 'POLICLÍNICA JOÃO DOS SANTOS BRAGA',
+    'hps 28 de agosto' : 'HPS 28 DE AGOSTO',
+    '28 de agosto' : 'HPS 28 DE AGOSTO',
+    'policlinica governador gilberto mestrinho' : 'POLICLÍNICA GOVERNADOR GILBERTO MESTRINHO',
+    'hps da crianca - zona leste' : 'HPS DA CRIANÇA - ZONA LESTE',
+    'hps da crianca - zona oeste' : 'HPS DA CRIANÇA - ZONA OESTE',
+    'fundacao cecon' : 'FUNDAÇÃO CECON',
+    'hospital universitario getulio vargas' : 'HOSPITAL UNIVERSITÁRIO GETÚLIO VARGAS – HUGV',
+    'hugv' : 'HOSPITAL UNIVERSITÁRIO GETÚLIO VARGAS – HUGV',
+    'fundacao de medicina tropical' : 'FUNDAÇÃO DE MEDICINA TROPICAL – FMT',
+    'fmt' : 'FUNDAÇÃO DE MEDICINA TROPICAL – FMT',
+    'fundacao hospital adriano jorge' : 'FUNDAÇÃO HOSPITAL ADRIANO JORGE – FHAJ',
+    'fhaj' : 'FUNDAÇÃO HOSPITAL ADRIANO JORGE – FHAJ',
+    'fundacao alfredo da matta' : 'FUNDAÇÃO ALFREDO DA MATTA – FAM',
+    'fundacao de vigilância em saude do amazonas - dra. rosemary costa pinto' : 'FUNDAÇÃO DE VIGILÂNCIA EM SAÚDE DO AMAZONAS - DRA. ROSEMARY COSTA PINTO',
+    'instituto da mulher dona lindu' : 'INSTITUTO DA MULHER DONA LINDÚ',
+    'hospital delphina aziz' : 'HOSPITAL DELPHINA AZIZ',
+    'delphina aziz' : 'HOSPITAL DELPHINA AZIZ',
+    'upa campos sales' : 'UPA CAMPOS SALES',
+    'upa jose rodrigues' : 'UPA JOSÉ RODRIGUES',
+    'ubs' : 'UBS',
+    'hapvida' : 'HAPVIDA',
+    'sensumed' : 'SENSUMED',
+    'check up' : 'CHECK UP',
+    'hospital santo alberto' : 'HOSPITAL SANTO ALBERTO',
+    'hospital beneficente portuguesa' : 'HOSPITAL BENEFICENTE PORTUGUESA',
+    'hospital adventista' : 'HOSPITAL ADVENTISTA',
+    'hospital santa julia' : 'HOSPITAL SANTA JÚLIA',
+    'instituto de oftalmologia de manaus' : 'INSTITUTO DE OFTALMOLOGIA DE MANAUS - IOM',
+    'iom' : 'INSTITUTO DE OFTALMOLOGIA DE MANAUS - IOM',
+    'hps' : 'HPS',
+    'spa' : 'SPA',
+    'caic' : 'CAIC',
+    'caimi' : 'CAIMI',
+    'upa' : 'UPA',
+    'maternidade' : 'MATERNIDADE',
+    'poloclinica' : 'POLICLÍNICA'
 }
