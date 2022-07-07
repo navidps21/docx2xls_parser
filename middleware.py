@@ -853,7 +853,6 @@ def create_sheet (data):
 
 #there's some dicts that are used
 
-
 specialist_dict = {
         'acupuntu' : 'ACUPUNTURISTA',
         'alergia e imunologia' : 'ALERGIA E IMUNOLOGIA',
@@ -1093,7 +1092,10 @@ hospital_dict = {
     'fmt' : 'FUNDAÇÃO DE MEDICINA TROPICAL – FMT',
     'fundacao hospital adriano jorge' : 'FUNDAÇÃO HOSPITAL ADRIANO JORGE – FHAJ',
     'fhaj' : 'FUNDAÇÃO HOSPITAL ADRIANO JORGE – FHAJ',
+    'fundacao alfredo da mata' : 'FUNDAÇÃO ALFREDO DA MATTA – FAM',
     'fundacao alfredo da matta' : 'FUNDAÇÃO ALFREDO DA MATTA – FAM',
+    'fundacao universitaria alfredo da mata' : 'FUNDAÇÃO ALFREDO DA MATTA – FAM',
+    'fundacao universitaria alfredo da matta' : 'FUNDAÇÃO ALFREDO DA MATTA – FAM',
     'fundacao de vigilância em saude do amazonas - dra. rosemary costa pinto' : 'FUNDAÇÃO DE VIGILÂNCIA EM SAÚDE DO AMAZONAS - DRA. ROSEMARY COSTA PINTO',
     'instituto da mulher dona lindu' : 'INSTITUTO DA MULHER DONA LINDÚ',
     'instituto da mulher' : 'INSTITUTO DA MULHER DONA LINDÚ',
