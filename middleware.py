@@ -445,13 +445,28 @@ def get_referencedunit (dict, tables_data, text_data):
     for i in new_table:
         for j in dict:
             if j in i:
-                if referencedunit.find(str(dict[j])) == -1 :
-                    referencedunit = referencedunit + str(dict[j]) + '; '
+                if ' ' in j:
+                    if referencedunit.find(str(dict[j])) == -1 :
+                        referencedunit = referencedunit + str(dict[j]) + '; '
+                else:
+                    new_list = i.replace('.', '').replace(',', '').split(' ')
+                    for i in new_list:
+                        if i in j and len(i) == len(j):
+                            if referencedunit.find(str(dict[j])) == -1 :
+                                referencedunit = referencedunit + str(dict[j]) + '; '
     for i in new_text:
         for j in dict:
             if j in i:
-                if referencedunit.find(str(dict[j])) == -1 :
-                    referencedunit = referencedunit + str(dict[j]) + '; '
+                if ' ' in j:
+                    if referencedunit.find(str(dict[j])) == -1 :
+                        referencedunit = referencedunit + str(dict[j]) + '; '
+                else:
+                    new_list = i.replace('.', '').replace(',', '').split(' ')
+                    for i in new_list:
+                        if i in j and len(i) == len(j):
+                            if referencedunit.find(str(dict[j])) == -1 :
+                                referencedunit = referencedunit + str(dict[j]) + '; '
+
 
     return referencedunit
 
@@ -1007,11 +1022,13 @@ hospital_dict = {
     'spa dr. danilo correa' : 'SPA E POLICLÍNICA DR. DANILO CORRÊA',
     'spa danilo correa' : 'SPA E POLICLÍNICA DR. DANILO CORRÊA',
     'policlinica codajas' : 'POLICLÍNICA CODAJÁS',
+    'pam da codajas' : 'POLICLÍNICA CODAJÁS',
     'fundacao hospital do coracao francisca mendes' : 'FUNDAÇÃO HOSPITAL DO CORAÇÃO FRANCISCA MENDES',
     'francisca mendes' : 'FUNDAÇÃO HOSPITAL DO CORAÇÃO FRANCISCA MENDES',
     'caic moura tapajos' : 'CAIC MOURA TAPAJÓS',
     'caic dr. jose contente' : 'CAIC DR. JOSÉ CONTENTE',
     'spa zona sul' : 'SPA ZONA SUL',
+    'hospital farjado' : 'HOSPITAL INFANTIL DR. FARJADO',
     'caic ana maria dos santos pereira braga' : 'CAIC ANA MARIA DOS SANTOS PEREIRA BRAGA',
     'hospital psiquiatrico eduardo ribeiro' : 'HOSPITAL PSIQUIÁTRICO EDUARDO RIBEIRO',
     'policlinica antônio aleixo' : 'POLICLÍNICA ANTÔNIO ALEIXO',
@@ -1044,6 +1061,8 @@ hospital_dict = {
     'centro de atencao psicossocial silverio tundis' : 'CENTRO DE ATENÇÃO PSICOSSOCIAL SILVÉRIO TUNDIS',
     'hospital infantil dr. fajardo' : 'HOSPITAL INFANTIL DR. FAJARDO',
     'policlinica cardoso fontes' : 'POLICLÍNICA CARDOSO FONTES',
+    'policlinica ana barreto' : 'POLICLÍNICA ANNA BARRETO PEREIRA',
+    'policlinica anna barreto' : 'POLICLÍNICA ANNA BARRETO PEREIRA',
     'cema' : 'CEMA',
     'lacen' : 'LABORATÓRIO CENTRAL',
     'laboratorio central' : 'LABORATÓRIO CENTRAL',
@@ -1055,17 +1074,21 @@ hospital_dict = {
     'maternidade ana braga' : 'MATERNIDADE ANA BRAGA',
     'fundacao de hematologia e hemoterapia do amazonas' : 'FUNDAÇÃO DE HEMATOLOGIA E HEMOTERAPIA DO AMAZONAS - FHEMOAM',
     'fhemoam' : 'FUNDAÇÃO DE HEMATOLOGIA E HEMOTERAPIA DO AMAZONAS - FHEMOAM',
+    'hemoam' : 'FUNDAÇÃO DE HEMATOLOGIA E HEMOTERAPIA DO AMAZONAS - FHEMOAM',
     'spa alvorada' : 'SPA ALVORADA',
     'policlinica zeno lanzini' : 'POLICLÍNICA ZENO LANZINI',
     'policlinica joao dos santos braga' : 'POLICLÍNICA JOÃO DOS SANTOS BRAGA',
     'hps 28 de agosto' : 'HPS 28 DE AGOSTO',
     '28 de agosto' : 'HPS 28 DE AGOSTO',
     'policlinica governador gilberto mestrinho' : 'POLICLÍNICA GOVERNADOR GILBERTO MESTRINHO',
-    'hps da crianca - zona leste' : 'HPS DA CRIANÇA - ZONA LESTE',
-    'hps da crianca - zona oeste' : 'HPS DA CRIANÇA - ZONA OESTE',
+    'hps da crianca zona leste' : 'HPS DA CRIANÇA - ZONA LESTE',
+    'hps da crianca zona oeste' : 'HPS DA CRIANÇA - ZONA OESTE',
+    'hps da crianca zona sul' : 'HPS DA CRIANÇA - ZONA SUL',
+    'hps zona sul' : 'HPS DA CRIANÇA - ZONA SUL',
     'fundacao cecon' : 'FUNDAÇÃO CECON',
     'hospital universitario getulio vargas' : 'HOSPITAL UNIVERSITÁRIO GETÚLIO VARGAS – HUGV',
     'hugv' : 'HOSPITAL UNIVERSITÁRIO GETÚLIO VARGAS – HUGV',
+    'ambulatorio araujo lima' : 'HOSPITAL UNIVERSITÁRIO GETÚLIO VARGAS – HUGV',
     'fundacao de medicina tropical' : 'FUNDAÇÃO DE MEDICINA TROPICAL – FMT',
     'fmt' : 'FUNDAÇÃO DE MEDICINA TROPICAL – FMT',
     'fundacao hospital adriano jorge' : 'FUNDAÇÃO HOSPITAL ADRIANO JORGE – FHAJ',
@@ -1073,6 +1096,7 @@ hospital_dict = {
     'fundacao alfredo da matta' : 'FUNDAÇÃO ALFREDO DA MATTA – FAM',
     'fundacao de vigilância em saude do amazonas - dra. rosemary costa pinto' : 'FUNDAÇÃO DE VIGILÂNCIA EM SAÚDE DO AMAZONAS - DRA. ROSEMARY COSTA PINTO',
     'instituto da mulher dona lindu' : 'INSTITUTO DA MULHER DONA LINDÚ',
+    'instituto da mulher' : 'INSTITUTO DA MULHER DONA LINDÚ',
     'hospital delphina aziz' : 'HOSPITAL DELPHINA AZIZ',
     'delphina aziz' : 'HOSPITAL DELPHINA AZIZ',
     'upa campos sales' : 'UPA CAMPOS SALES',
