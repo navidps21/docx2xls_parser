@@ -296,10 +296,17 @@ def get_companion(tables_data):
     companion = 'ACOMPANHANTE: '
     for i in tables_data:
         if 'ACOMPANHANT' in i:
-            companion_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
-            if len(companion_temp) >= 5:
+            lc_i = i.lower()
+            companion_temp = str(r.findall(r':(.*)', lc_i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+            if 'acompanhante' in companion_temp:
+                companion = companion + "N"
+                return companion
+            elif len(companion_temp) >= 5:
                 companion = companion + "S"
                 return companion
+            elif not companion_temp:
+                companion = companion + "N"
+                return companion        
             else:
                 companion = companion + "N"
                 return companion

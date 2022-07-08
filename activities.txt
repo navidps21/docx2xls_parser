@@ -3,7 +3,7 @@ faltam 4 funções
 faltam converter arquivos de 2018 para docx!!!
 melhorar funções dict
 otimizar codigo reduzir tempo
-melhorar acompanhante (sem acompanhante)
+
 
 
 
@@ -57,3 +57,4 @@ lista corrompidos
 melhorar entrydate
 unidade referenciada
 condição sensivel a condição primaria
+melhorar acompanhante (sem acompanhante)
