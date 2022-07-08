@@ -8,6 +8,8 @@ import xlwt
 
 
 def get_raw_tables_data (wordDoc):
+    #this function get the data from the table without any adjust
+
     raw_data = []
 
     for table in wordDoc.tables:
@@ -78,6 +80,8 @@ def get_text (wordDoc):
     return (new_fullText)
 
 def lowercase_text (fullText):
+    #this function convert the text to lowercase and change latin caracters
+    
     lc_fullText = []
     for i in fullText:
         lc_fullText.append(i.lower().replace('ç', 'c').replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ã', 'a').replace('ê', 'e'))
@@ -86,6 +90,8 @@ def lowercase_text (fullText):
     return (lc_fullText)
 
 def lowercase_table (tables_data):
+    #this function convert the tables content to lowercase and change latin caracters
+
     lc_tablesdata = []
     for i in tables_data:
         lc_tablesdata.append(i.lower().replace('ç', 'c').replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ã', 'a').replace('ê', 'e'))
@@ -165,6 +171,8 @@ def get_month (fullText):
                 return month
 
 def get_gender ():
+    #this function insert a new collum in the sheet
+
     gender = 'SEXO: '
     return gender
 
@@ -199,6 +207,8 @@ def get_age (tables_data):
     return (tables_data)
 
 def get_entrydate (tables_data, text_data):
+    #this function get the correct entrydate
+
     #print(tables_data)
     #print(lowercase_text(text_data))
 
@@ -312,6 +322,7 @@ def get_companion(tables_data):
                 return companion
 
 def get_neglecteddiseases (tables_data, text_data):
+    #this function search neglected diseases in document
 
     neglecteddiseases = [
         'malaria',
@@ -354,7 +365,8 @@ def get_neglecteddiseases (tables_data, text_data):
     return (neglected)
 
 def get_conditionsensitive (dict, tables_data, text_data):
-
+    #this function search disease sensitive to primary condition
+    
     new_text = lowercase_text(text_data)
 
     new_table = lowercase_table(tables_data)
@@ -400,6 +412,7 @@ def get_conditionsensitive_reason (dict, tables_data, text_data):
 
 def get_giveup(text_data):
     #this function return if pacient give up or not
+
     giveup = 'DESISTÊNCIA: '
 
     lc_text = lowercase_text(text_data)
@@ -413,7 +426,8 @@ def get_giveup(text_data):
     return giveup
 
 def get_giveup_reason(text_data):
-    #this function return if pacient give up or not
+    #this function return the reason if the pacient had give up
+
     giveup_reason = 'MOTIVO DESIST: '
 
     lc_text = lowercase_text(text_data)
@@ -427,6 +441,7 @@ def get_giveup_reason(text_data):
 
 def get_internment(text_data):
     #this function return if pacient were internment or not
+
     internment = 'INTERNAÇÃO HOSPITALAR: '
     
     lc_text = lowercase_text(text_data)
@@ -440,6 +455,7 @@ def get_internment(text_data):
     return internment
 
 def get_referencedunit (dict, tables_data, text_data):
+    #this function get all referenced units in document
 
     new_table = lowercase_table(tables_data)
 
@@ -479,7 +495,6 @@ def get_referencedunit (dict, tables_data, text_data):
 
 def get_provdischarge (text_data):
     #this functions return if pacient had a provisional discharge
-    #this function return if pacient give up or not
 
     provdischarge = 'ALTA PROVISÓRIA: '
 
@@ -495,6 +510,7 @@ def get_provdischarge (text_data):
 
 def get_problemsolved (tables_data):
     #this function return if the problem were solved
+
     problemsolved = 'PROBLEMA RESOLVIDO: '
     for i in tables_data:
         if 'ALTA PROVISÓRIA: N' in i:
@@ -556,6 +572,7 @@ def get_conditition (text_data):
     return(pacientcond.replace('OBS:', 'OBS.').replace('\\t', '').replace("['",'').replace("', '", '').replace("']", '').replace('  ', ''))
 
 def get_specialty (dict, tables_data, text_data):
+    #this function get all the specialtys in document
 
     new_table = lowercase_table(tables_data)
 
@@ -587,6 +604,7 @@ def get_path(file_path):
     return (path)
 
 def get_outputlog (list, issues, invalid, valid):
+    #create a log the projet's root with a short resume of document's status
 
     f= open("output_log.txt","w+")
 
@@ -610,7 +628,7 @@ def get_outputlog (list, issues, invalid, valid):
     f.close()
 
 def organizer (tables_data):
-    #organize the table
+    #organize the colluns
 
     #print(tables_data)
 

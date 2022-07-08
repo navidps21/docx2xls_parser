@@ -16,6 +16,7 @@ motivo do retorno (pref. motivo está em consulta)(paragrafos com retorno dos ul
 
 
 done:
+
 ANO de referencia
 MÊS (JUL/AGO..) número
 ***SEXO (F/M)
@@ -51,6 +52,7 @@ motivo da desistencia (paragrafos)
 
 
 
+done:
 
 lista invalidos
 lista corrompidos
