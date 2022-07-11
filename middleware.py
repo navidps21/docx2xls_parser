@@ -237,6 +237,8 @@ def get_entrydate (tables_data, text_data):
 def get_time (tables_data):
     #get time in hospital
 
+    time_data = 'TEMPO DE INTERNAÇÃO: '
+
     for i in tables_data:
         if 'DATA DO INGRESSO:' in i:
             start_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
@@ -244,12 +246,15 @@ def get_time (tables_data):
             init = datetime.strptime(init, "%d/%m/%Y").date()
         if 'DATA DA ALTA:' in i:
             end_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+            if not end_temp:
+                indices = [i for i, s in enumerate(tables_data) if 'DATA DA ALTA:' in s]
+                tables_data.insert(indices[0]+1, time_data)
+                return (tables_data)
             finish = convert_year(end_temp)
             finish = datetime.strptime(finish, "%d/%m/%Y").date()
 
     time = finish - init
 
-    time_data = 'TEMPO DE INTERNAÇÃO: '
     time_data = time_data + str(time.days)
     
     indices = [i for i, s in enumerate(tables_data) if 'DATA DA ALTA:' in s]
@@ -830,6 +835,8 @@ def run_automation():
     sheet1.col(8).width = 4000
     sheet1.col(9).width = 2600
     sheet1.col(10).width = 2600
+    sheet1.col(11).width = 4000
+    sheet1.col(12).width = 4000
 
     now = datetime.now()
     dt_string = now.strftime("%d%m%Y_%H%M%S")

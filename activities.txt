@@ -60,3 +60,4 @@ melhorar entrydate
 unidade referenciada
 condição sensivel a condição primaria
 melhorar acompanhante (sem acompanhante)
+fix em tempo de internação
