@@ -1,17 +1,10 @@
 Roadmap:
-faltam 4 funções
-faltam converter arquivos de 2018 para docx!!!
 melhorar funções dict
 otimizar codigo reduzir tempo
-
-
-
-
-
+dict para comunidade
 exame realizado (laboratorial/imagem/biopsia)***
-data do retorno (01/01/0001) (tabela cronograma de retorno)
-delta entre alta e retorno (dias)
-motivo do retorno (pref. motivo está em consulta)(paragrafos com retorno dos ultimos paragrafos)
+
+
 
 
 
@@ -25,6 +18,9 @@ Nome do Paciente
 Data de Ingresso (data com / ou com .)
 Data de Alta
 Tempo de internação (dias)
+data do retorno (01/01/0001) (tabela cronograma de retorno)
+delta entre alta e retorno (dias)
+motivo do retorno (pref. motivo está em consulta)(paragrafos com retorno dos ultimos paragrafos)
 DN (data de nascimento)
 condição na admissão
 condição na alta
@@ -46,18 +42,3 @@ alta provisória (s/n) (obs: info)
 problema resolvido (s/n) (atrelado a alta provisoria == n)
 desistencia (s/n)
 motivo da desistencia (paragrafos)
-
-
-
-
-
-
-done:
-
-lista invalidos
-lista corrompidos
-melhorar entrydate
-unidade referenciada
-condição sensivel a condição primaria
-melhorar acompanhante (sem acompanhante)
-fix em tempo de internação

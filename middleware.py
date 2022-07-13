@@ -284,7 +284,7 @@ def convert_year(date):
     #date = date.replace('.', '/')
 
     #date_temp = str(r.findall(r'/(.{2}$)', date)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
-    date = date.replace(' ', '').replace(';','/')
+    date = date.replace(' ', '').replace(';','/').replace('.', '/')
     date_temp = date.split('/')[-1]
     date_temp = int(date_temp)
     if (len(str(date_temp))) <= 2:
@@ -509,6 +509,9 @@ def get_provdischarge (text_data):
         if 'paciente de alta provisoria para seu municipio de origem' in i:
             provdischarge = provdischarge + "S"
             return provdischarge
+        if 'paciente segue de alta provisoria para seu municipio de origem' in i:
+            provdischarge = provdischarge + "S"
+            return provdischarge
 
     provdischarge = provdischarge + "N"
     return provdischarge
@@ -545,7 +548,7 @@ def get_conditition (text_data):
         if 'PENDENCIAS EM FILA DE ESPERA NO SISREG' in i:
             indice_1 = [i for i, s in enumerate(text_data) if 'PENDENCIAS EM FILA DE ESPERA NO SISREG' in s]
             cont.append(indice_1[0])
-        if 'CRONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in i:
+        if 'RONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in i:
             indice_2 = [i for i, s in enumerate(text_data) if 'CRONOGRAMA DE RETORNO CONSULTA/EXAME/CIRURGIA' in s]
             cont.append(indice_2[0])
         if 'TERAPIA MEDICAMENTOSA' in i:
@@ -600,6 +603,104 @@ def get_specialty (dict, tables_data, text_data):
 
     return specialty
 
+def get_returndate (tables_data, raw_tablesdata, text_data):
+    #this function get the date that the pacient must come back
+
+    index_list = ['Data', 'Consulta', 'Médico', 'Local']
+
+    index_lc = lowercase_text(index_list)
+
+    tables_lc = lowercase_table(raw_tablesdata)
+
+    index = []
+
+    returndate = 'DATA DO RETORNO: '
+
+    returnreason = 'MOTIVO RETORNO: '
+
+    for i in text_data:
+        if 'RONOGRAMA DE RETORNO CONSULTA' in i or 'RONOGRAMA DE RETORNO PARA CONSULTA' in i:
+            for i in range(len(tables_lc)):
+                #if tables_lc[i:i+len(index_lc)] == index_lc:
+                    #index.append((i, i+len(index_list)))
+                    #index.append((i+len(index_list)))
+                #if index_lc[0] in tables_lc[i] and index_lc[1] in tables_lc[i+1] and index_lc[2] in tables_lc[i+2] and index_lc[3] in tables_lc[i+3]:
+                if index_lc[0] in tables_lc[i] and index_lc[2] in tables_lc[i+2] and index_lc[3] in tables_lc[i+3]:
+                    #index.append((i, i+len(index_list)))
+                    index.append((i+len(index_list)))
+
+            max_ind = max(index)
+
+            if (len(raw_tablesdata)) > max_ind:
+                date = r.findall(r"\d{2}[./]\d{2}[./]\d{4}", raw_tablesdata[max_ind])
+                if not date:
+                    date = r.findall(r"\d{2}[./]\d{2}[./]\d{2}", raw_tablesdata[max_ind])
+
+                if date:
+                    date = convert_year(date[0])
+
+                if not date:
+                    date.append(raw_tablesdata[max_ind])
+                    date = date[0]
+
+                date = str(date)
+
+                returnreason = returnreason + str(raw_tablesdata[max_ind + 1])
+            else:
+                date = [' ']
+                date = str(date)
+
+            #date = str(date)
+
+            returndate = returndate + date
+
+            tables_data.append(returndate)
+
+            tables_data.append(returnreason)
+
+            return (tables_data)
+
+    tables_data.append(returndate)
+
+    tables_data.append(returnreason)
+
+    return (tables_data)
+
+def get_deltareturndate (tables_data):
+    #get time between provisional discharge and return date
+
+    time_data = 'TEMPO ALTA-RETORNO: '
+
+    for i in tables_data:
+        if 'DATA DA ALTA:' in i:
+            start_temp = r.findall(r"\d{2}[./]\d{2}[./]\d{4}", i)
+            if not start_temp:
+                start_temp = r.findall(r"\d{2}[./]\d{2}[./]\d{2}", i)
+            if not start_temp:
+                indices = [i for i, s in enumerate(tables_data) if 'DATA DO RETORNO:' in s]
+                tables_data.insert(indices[0]+1, time_data)
+                return (tables_data)
+            init = convert_year(start_temp[0])
+            init = datetime.strptime(init, "%d/%m/%Y").date()
+
+        if 'DATA DO RETORNO:' in i:
+            end_temp = r.findall(r"\d{2}[./]\d{2}[./]\d{4}", i)
+            if not end_temp:
+                indices = [i for i, s in enumerate(tables_data) if 'DATA DO RETORNO:' in s]
+                tables_data.insert(indices[0]+1, time_data)
+                return (tables_data)
+            finish = convert_year(end_temp[0])
+            finish = datetime.strptime(finish, "%d/%m/%Y").date()
+
+    time = finish - init
+
+    time_data = time_data + str(time.days)
+    
+    indices = [i for i, s in enumerate(tables_data) if 'DATA DO RETORNO:' in s]
+    tables_data.insert(indices[0]+1, time_data)
+
+    return (tables_data)
+
 def get_path(file_path):
     #get path of the project and generate a hyperlink
 
@@ -637,7 +738,7 @@ def organizer (tables_data):
 
     #print(tables_data)
 
-    new_table = ['s'] * 31
+    new_table = ['s'] * 34
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -663,44 +764,50 @@ def organizer (tables_data):
             new_table[10] = i
         elif 'TEMPO DE INTERNAÇÃO:' in i:
             new_table[11] = i
-        elif 'HD:' in i:
+        elif 'DATA DO RETORNO:' in i:
             new_table[12] = i
-        elif 'ESPECIALIDADES:' in i:
+        elif 'TEMPO ALTA-RETORNO:' in i:
             new_table[13] = i
-        elif 'CONDIÇÃO DO INGRESSO:' in i:
+        elif 'MOTIVO RETORNO:' in i:
             new_table[14] = i
-        elif 'CONDIÇÃO DO EGRESSO:' in i:
+        elif 'HD:' in i:
             new_table[15] = i
-        elif 'INTERNAÇÃO HOSPITALAR:' in i:
+        elif 'ESPECIALIDADES:' in i:
             new_table[16] = i
-        elif 'UNIDADE REFERENCIADA:' in i:
+        elif 'CONDIÇÃO DO INGRESSO:' in i:
             new_table[17] = i
-        elif 'DESLOCAMENTO:' in i:
+        elif 'CONDIÇÃO DO EGRESSO:' in i:
             new_table[18] = i
-        elif 'PARA:' in i:
+        elif 'INTERNAÇÃO HOSPITALAR:' in i:
             new_table[19] = i
-        elif 'MEIO DE TRANSPORTE:' in i:
+        elif 'UNIDADE REFERENCIADA:' in i:
             new_table[20] = i
-        elif 'ACOMPANHANTE:' in i:
+        elif 'DESLOCAMENTO:' in i:
             new_table[21] = i
-        elif 'ALTA PROVISÓRIA:' in i:
+        elif 'PARA:' in i:
             new_table[22] = i
-        elif 'DOENÇA NEGLIGENCIADA:' in i:
+        elif 'MEIO DE TRANSPORTE:' in i:
             new_table[23] = i
-        elif 'DOENÇA SENSÍVEL' in i:
+        elif 'ACOMPANHANTE:' in i:
             new_table[24] = i
-        elif 'MOTIVO DOENÇA DE CONDI' in i:
+        elif 'ALTA PROVISÓRIA:' in i:
             new_table[25] = i
-        elif 'SITUAÇÃO DO PACIENTE:' in i:
+        elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[26] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'DOENÇA SENSÍVEL' in i:
             new_table[27] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'MOTIVO DOENÇA DE CONDI' in i:
             new_table[28] = i
-        if 'MOTIVO DESIST:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[29] = i
-        elif 'CAMINHO:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[30] = i
+        elif 'DESISTÊNCIA:' in i:
+            new_table[31] = i
+        if 'MOTIVO DESIST:' in i:
+            new_table[32] = i
+        elif 'CAMINHO:' in i:
+            new_table[33] = i
     return new_table
 
 def get_data (wordDoc, spec_dict, sensitive_dict, hospital_dict , file_path):
@@ -747,6 +854,10 @@ def get_data (wordDoc, spec_dict, sensitive_dict, hospital_dict , file_path):
     tables_data.append(get_internment(text_data))
 
     tables_data.append(get_referencedunit(hospital_dict, tables_data, text_data))
+
+    tables_data = get_returndate(tables_data, raw_tables_data, text_data)
+
+    tables_data = get_deltareturndate(tables_data)
 
     tables_data.append(get_path(file_path))
 
