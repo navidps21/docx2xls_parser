@@ -709,7 +709,25 @@ def get_path(file_path):
     path = path.replace("\\","/")
     return (path)
 
-def get_ethnicity():
+def get_ethnicity(tables_data, ethnicity_dict):
+    #this function apply a fix in ethniticity collun
+
+    ethnicity = 'ETNIA: '
+
+    lc_table = lowercase_table (tables_data)
+
+    for i in lc_table:
+        for j in ethnicity_dict:
+            if j in i:
+                if 'etnia:' in i:
+                    ethnicity = ethnicity + str(ethnicity_dict[j])
+                    indice = [i for i, s in enumerate(tables_data) if 'ETNIA:' in s]
+                    tables_data.insert(indice[0]+1, ethnicity)
+                    return (tables_data)
+
+    return (tables_data)
+
+def get_ethnicities ():
     #this function get the names of ethnicity
     abs_path = os.path.abspath(os.curdir)
 
@@ -717,12 +735,11 @@ def get_ethnicity():
 
     ethnicity = 'ETNIAS: '
 
-    f= open("ethnicity.txt","w+")
+    f = open("ethnicity.txt","w+")
 
     issues = 0
     invalid = 0
 
-    #all_tables_data = [[0]*(len(files))]*26
     for file_path in range (len(files)):
 
         temp = files[file_path].split('\\')[-1]
@@ -753,7 +770,28 @@ def get_ethnicity():
 
     f.write ('%s' %ethnicity)
 
-    return 0
+def get_examsperformed (raw_tablesdata, text_data):
+    #this function get the exams performed during the interment
+
+    index_list = ['Data', 'Consulta', 'Médico', 'Local']
+
+    index_lc = lowercase_text(index_list)
+
+    tables_lc = lowercase_table(raw_tablesdata)
+
+    #text_lc = lowercase_text(text_data)
+
+    index = []
+
+    for i in text_data:
+        if 'CONSULTAS/EXAME/CIRURGIA' in i:
+            for i in range(len(tables_lc)):
+                if index_lc[0] in tables_lc[i] and index_lc[2] in tables_lc[i+2] and index_lc[3] in tables_lc[i+3]:
+                    index.append((i+len(index_list)))
+
+            min_ind = min(index)
+
+    print (raw_tablesdata[min_ind:])
 
 def get_outputlog (list, issues, invalid, valid):
     #create a log the projet's root with a short resume of document's status
@@ -856,7 +894,7 @@ def organizer (tables_data):
             new_table[33] = i
     return new_table
 
-def get_data (wordDoc, spec_dict, sensitive_dict, hospital_dict , file_path):
+def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict , file_path):
     #generate tables_data
     
     tables_data = get_tables_data(wordDoc)
@@ -872,6 +910,8 @@ def get_data (wordDoc, spec_dict, sensitive_dict, hospital_dict , file_path):
     tables_data.insert(2, get_gender())
 
     tables_data = get_entrydate(tables_data, text_data)
+
+    tables_data = get_ethnicity(tables_data, ethnicity_dict)
 
     tables_data = get_age(tables_data)
 
@@ -904,6 +944,8 @@ def get_data (wordDoc, spec_dict, sensitive_dict, hospital_dict , file_path):
     tables_data = get_returndate(tables_data, raw_tables_data, text_data)
 
     tables_data = get_deltareturndate(tables_data)
+
+    #get_examsperformed(raw_tables_data, text_data)
 
     tables_data.append(get_path(file_path))
 
@@ -948,7 +990,7 @@ def run_automation():
         else:
             wordDoc = Document(files[file_path])
             #print(files[file_path])
-            tables_data = get_data(wordDoc, specialist_dict, conditionsensitive_dict, hospital_dict, files[file_path])
+            tables_data = get_data(wordDoc, ethnicity_dict, specialist_dict, conditionsensitive_dict, hospital_dict, files[file_path])
 
             for j in tables_data:
                 specs_temp = str(r.findall(r'(.*):', j)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
@@ -1309,4 +1351,8 @@ hospital_dict = {
     'upa' : 'UPA',
     'maternidade' : 'MATERNIDADE',
     'poloclinica' : 'POLICLÍNICA'
+}
+
+ethnicity_dict = {
+    'bare' : 'BARÉ'
 }

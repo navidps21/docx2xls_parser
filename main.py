@@ -12,15 +12,15 @@ run_automation()
 
 """
 #Get document in path
-#file_path = 'data\CONTRA REF 2019\MAO\OUTUBRO\AREL PALHETA DE MENEZES.docx'
-file_path = 'data\ARS\DEZEMBRO\ANGUIDA FERREIRA ANGELO.docx'
+#file_path = 'data\CONTRA REF 2019\MAO\OUTUBRO\ARGEL PALHETA DE MENEZES.docx'
+file_path = 'data/CONTRA REF 2019/ARN/NOVEMBRO/MIRIAN JOSÉ MATEUS.docx'
 
 wordDoc = Document(file_path)
 abs_path = os.path.abspath(os.curdir)
 abs_path = abs_path + '/' + file_path
 
 #Get data from the tables and text
-tables_data = get_data(wordDoc, specialist_dict, conditionsensitive_dict, hospital_dict, abs_path)
+tables_data = get_data(wordDoc, ethnicity_dict, specialist_dict, conditionsensitive_dict, hospital_dict, abs_path)
 create_sheet(tables_data)
 
 print ('Work done!')
@@ -31,4 +31,4 @@ print ('Work done!')
 #**********************************************************
 #Get any collum data in the sheet
 
-#get_ethnicity()
+#get_ethnicities()
