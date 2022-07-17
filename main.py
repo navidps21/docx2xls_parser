@@ -3,11 +3,12 @@ from middleware import *
 
 
 #Run the automation for all files
+
 run_automation()
 
 
+#**********************************************************
 #Run the automation for one specific file
-
 
 """
 #Get document in path
@@ -25,3 +26,9 @@ create_sheet(tables_data)
 print ('Work done!')
 
 """
+
+
+#**********************************************************
+#Get any collum data in the sheet
+
+#get_ethnicity()

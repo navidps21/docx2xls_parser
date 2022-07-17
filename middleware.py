@@ -709,6 +709,52 @@ def get_path(file_path):
     path = path.replace("\\","/")
     return (path)
 
+def get_ethnicity():
+    #this function get the names of ethnicity
+    abs_path = os.path.abspath(os.curdir)
+
+    files = glob.glob(abs_path + '/**/*.docx', recursive=True)
+
+    ethnicity = 'ETNIAS: '
+
+    f= open("ethnicity.txt","w+")
+
+    issues = 0
+    invalid = 0
+
+    #all_tables_data = [[0]*(len(files))]*26
+    for file_path in range (len(files)):
+
+        temp = files[file_path].split('\\')[-1]
+    
+        if '~$' in temp[:2]:
+            issues = issues + 1
+        if '$~' in temp[:2]:
+            invalid = invalid + 1
+        else:
+            wordDoc = Document(files[file_path])
+            #print(files[file_path])
+            tables_data = get_tables_data(wordDoc)
+
+            tables_data = lowercase_table(tables_data)
+            
+            for i in tables_data:
+                if 'etnia:' in i:
+                        ethnicity_temp = str(r.findall(r':(.*)', i))
+                        ethnicity_temp = ethnicity_temp.replace("[' ", "").replace("['", "").replace(" ']", "").replace("']", "")
+
+                        if ethnicity.find(ethnicity_temp) == -1 :
+                            ethnicity = ethnicity + ethnicity_temp + ';'
+
+                            print(ethnicity_temp)
+    
+    
+    ethnicity = ethnicity.replace(';', "' : ''\r")
+
+    f.write ('%s' %ethnicity)
+
+    return 0
+
 def get_outputlog (list, issues, invalid, valid):
     #create a log the projet's root with a short resume of document's status
 
