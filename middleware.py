@@ -770,12 +770,14 @@ def get_ethnicities ():
 
     f.write ('%s' %ethnicity)
 
-def get_examsperformed (raw_tablesdata, text_data):
+def get_examsperformed (raw_tablesdata, tables_data, text_data):
     #this function get the exams performed during the interment
 
-    index_list = ['Data', 'Consulta', 'Médico', 'Local']
+    index_lc = ['data', 'consulta', 'medico', 'local']
 
-    index_lc = lowercase_text(index_list)
+    index_lc_ = ['data', 'exames realizados', 'local']
+
+    endindex_lc = ['data', 'medicamento', 'tratamento']
 
     tables_lc = lowercase_table(raw_tablesdata)
 
@@ -783,15 +785,51 @@ def get_examsperformed (raw_tablesdata, text_data):
 
     index = []
 
-    for i in text_data:
-        if 'CONSULTAS/EXAME/CIRURGIA' in i:
+    end_index = [len(tables_lc)]
+
+    for i in tables_data:
+        if 'DATA DA ALTA:' in i:
+            end_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+            finish = convert_year(end_temp)
+            finish = datetime.strptime(finish, "%d/%m/%Y").date()
+
+            break
+
+    for j in text_data:
+        if 'REGISTRO DE INTERVEN' in j:
+            for i in range(len(tables_lc)):
+                if index_lc_[0] in tables_lc[i] and index_lc_[1] in tables_lc[i+1] and index_lc_[2] in tables_lc[i+2]:
+                    index.append((i+len(index_lc_)))
+
+        if 'CONSULTAS/EXAME/CIRURGIA' in j:
             for i in range(len(tables_lc)):
                 if index_lc[0] in tables_lc[i] and index_lc[2] in tables_lc[i+2] and index_lc[3] in tables_lc[i+3]:
-                    index.append((i+len(index_list)))
+                    index.append((i+len(index_lc)))
 
-            min_ind = min(index)
+    for i in range(len(tables_lc)):
+        if endindex_lc[0] in tables_lc[i] and endindex_lc[1] in tables_lc[i+1] and endindex_lc[2] in tables_lc[i+2]:
+            end_index.insert(0, i)
 
-    print (raw_tablesdata[min_ind:])
+    min_ind = min(index)
+
+    max_ind = min(end_index)
+
+    examslist_temp = raw_tablesdata[min_ind:max_ind]
+
+    examlist = []
+
+    for i in range (len(examslist_temp)):
+        date_temp = examslist_temp[i]
+        if date_temp[:2].isdigit():
+            exam_date = convert_year(date_temp)
+            exam_date = datetime.strptime(exam_date, "%d/%m/%Y").date()
+
+            if finish > exam_date:
+                if not 'ista' in examslist_temp[i+1]:
+                    #print(examslist_temp[i+1])
+                    examlist.append(examslist_temp[i+1])
+
+    print (examlist)
 
 def get_outputlog (list, issues, invalid, valid):
     #create a log the projet's root with a short resume of document's status
@@ -945,7 +983,7 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict 
 
     tables_data = get_deltareturndate(tables_data)
 
-    #get_examsperformed(raw_tables_data, text_data)
+    get_examsperformed(raw_tables_data, tables_data, text_data)
 
     tables_data.append(get_path(file_path))
 
