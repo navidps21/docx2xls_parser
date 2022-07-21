@@ -32,3 +32,5 @@ print ('Work done!')
 #Get any collum data in the sheet
 
 #get_ethnicities()
+
+#get_examsperformed ()

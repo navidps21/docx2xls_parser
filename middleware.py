@@ -770,66 +770,113 @@ def get_ethnicities ():
 
     f.write ('%s' %ethnicity)
 
-def get_examsperformed (raw_tablesdata, tables_data, text_data):
+def get_examsperformed ():
     #this function get the exams performed during the interment
 
-    index_lc = ['data', 'consulta', 'medico', 'local']
+    abs_path = os.path.abspath(os.curdir)
 
-    index_lc_ = ['data', 'exames realizados', 'local']
+    files = glob.glob(abs_path + '/**/*.docx', recursive=True)
 
-    endindex_lc = ['data', 'medicamento', 'tratamento']
+    examlist = 'EXAMES: '
 
-    tables_lc = lowercase_table(raw_tablesdata)
+    f = open("exams.txt","w+")
 
-    #text_lc = lowercase_text(text_data)
+    issues = 0
+    invalid = 0
 
-    index = []
+    for file_path in range (len(files)):
 
-    end_index = [len(tables_lc)]
+        temp = files[file_path].split('\\')[-1]
+    
+        if '~$' in temp[:2]:
+            issues = issues + 1
+        if '$~' in temp[:2]:
+            invalid = invalid + 1
+        else:
+            wordDoc = Document(files[file_path])
+            #print(files[file_path])
 
-    for i in tables_data:
-        if 'DATA DA ALTA:' in i:
-            end_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
-            finish = convert_year(end_temp)
-            finish = datetime.strptime(finish, "%d/%m/%Y").date()
+            tables_data = get_tables_data(wordDoc)
 
-            break
+            raw_tables_data = get_raw_tables_data (wordDoc)
 
-    for j in text_data:
-        if 'REGISTRO DE INTERVEN' in j:
+            text_data = get_text(wordDoc)
+
+            index_lc = ['data', 'consulta', 'medico', 'local']
+
+            index_lc_ = ['data', 'exames realizados', 'local']
+
+            endindex_lc = ['data', 'medicamento', 'tratamento']
+
+            tables_lc = lowercase_table(raw_tables_data)
+
+            #text_lc = lowercase_text(text_data)
+
+            index = []
+
+            end_index = [len(tables_lc)]
+
+            for i in tables_data:
+                if 'DATA DA ALTA:' in i:
+                    end_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+                    if not end_temp:
+                        break
+                    finish = convert_year(end_temp)
+                    finish = datetime.strptime(finish, "%d/%m/%Y").date()
+
+                    break
+
+            for j in text_data:
+                if 'REGISTRO DE INTERVEN' in j:
+                    for i in range(len(tables_lc)):
+                        if index_lc_[0] in tables_lc[i] and index_lc_[1] in tables_lc[i+1] and index_lc_[2] in tables_lc[i+2]:
+                            index.append((i+len(index_lc_)))
+
+                if 'CONSULTAS/EXAME/CIRURGIA' in j:
+                    for i in range(len(tables_lc)):
+                        if index_lc[0] in tables_lc[i] and index_lc[2] in tables_lc[i+2] and index_lc[3] in tables_lc[i+3]:
+                            index.append((i+len(index_lc)))
+
             for i in range(len(tables_lc)):
-                if index_lc_[0] in tables_lc[i] and index_lc_[1] in tables_lc[i+1] and index_lc_[2] in tables_lc[i+2]:
-                    index.append((i+len(index_lc_)))
+                if endindex_lc[0] in tables_lc[i] and endindex_lc[1] in tables_lc[i+1] and endindex_lc[2] in tables_lc[i+2]:
+                    end_index.append(i)
+                if 'protocolo' in tables_lc[i]:
+                    end_index.append(i)
 
-        if 'CONSULTAS/EXAME/CIRURGIA' in j:
-            for i in range(len(tables_lc)):
-                if index_lc[0] in tables_lc[i] and index_lc[2] in tables_lc[i+2] and index_lc[3] in tables_lc[i+3]:
-                    index.append((i+len(index_lc)))
+            if not index:
+                index = [len(tables_lc)]
+                min_ind = min(index)
+            else:
+                min_ind = min(index)
 
-    for i in range(len(tables_lc)):
-        if endindex_lc[0] in tables_lc[i] and endindex_lc[1] in tables_lc[i+1] and endindex_lc[2] in tables_lc[i+2]:
-            end_index.insert(0, i)
+            max_ind = min(end_index)
 
-    min_ind = min(index)
+            examslist_temp = tables_lc[min_ind:max_ind]
 
-    max_ind = min(end_index)
+            for i in range (len(examslist_temp)):
+                date_temp = examslist_temp[i]
+                if date_temp[:2].isdigit():
+                    date_new = r.findall(r"\d{2}[./]\d{2}[./]\d{4}", date_temp)
+                    if not date_new:
+                        date_new = r.findall(r"\d{2}[./]\d{2}[./]\d{2}", date_temp)
+                    if not date_new:
+                        continue
+                    exam_date = convert_year(date_new[0])
+                    exam_date = datetime.strptime(exam_date, "%d/%m/%Y").date()
 
-    examslist_temp = raw_tablesdata[min_ind:max_ind]
+                    if not finish:
+                        break
 
-    examlist = []
+                    if finish > exam_date:
+                        if not 'ista' in examslist_temp[i+1]:
+                            print(examslist_temp[i+1])
 
-    for i in range (len(examslist_temp)):
-        date_temp = examslist_temp[i]
-        if date_temp[:2].isdigit():
-            exam_date = convert_year(date_temp)
-            exam_date = datetime.strptime(exam_date, "%d/%m/%Y").date()
+                            if examlist.find(examslist_temp[i+1]):
+                                examlist = examlist + str(examslist_temp[i+1]) + ';'
 
-            if finish > exam_date:
-                if not 'ista' in examslist_temp[i+1]:
-                    #print(examslist_temp[i+1])
-                    examlist.append(examslist_temp[i+1])
+    examlist = examlist.replace(';', "' : ''\r")
 
-    print (examlist)
+    f.write ('%s' %examlist)
 
 def get_outputlog (list, issues, invalid, valid):
     #create a log the projet's root with a short resume of document's status
@@ -982,8 +1029,6 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict 
     tables_data = get_returndate(tables_data, raw_tables_data, text_data)
 
     tables_data = get_deltareturndate(tables_data)
-
-    get_examsperformed(raw_tables_data, tables_data, text_data)
 
     tables_data.append(get_path(file_path))
 
