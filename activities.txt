@@ -1,7 +1,6 @@
 Roadmap:
 melhorar funções dict
 otimizar codigo reduzir tempo
-melhorar etnias
 exame realizado (laboratorial/imagem/biopsia)***
 
 
