@@ -201,8 +201,10 @@ def get_age (tables_data):
     
     age_data = age_data + str(age)
     
-    indices = [i for i, s in enumerate(tables_data) if 'DN:' in s]
-    tables_data.insert(indices[0]+10, age_data)
+    #indices = [i for i, s in enumerate(tables_data) if 'DN:' in s]
+    #tables_data.insert(indices[0]+10, age_data)
+
+    tables_data.append(age_data)
 
     return (tables_data)
 
@@ -770,6 +772,84 @@ def get_ethnicities ():
 
     f.write ('%s' %ethnicity)
 
+def get_servicereceived (tables_data, raw_tables_data, text_data) :
+    #get all the services received during the internment
+
+    index_lc = ['data', 'consulta', 'medico', 'local']
+
+    index_lc_ = ['data', 'exames realizados', 'local']
+
+    endindex_lc = ['data', 'medicamento', 'tratamento']
+
+    tables_lc = lowercase_table(raw_tables_data)
+
+    end_index = [len(tables_lc)]
+
+    index = []
+
+    examlist = 'ATENDIMENTO RECEBIDO: '
+
+    for i in tables_data:
+        if 'DATA DA ALTA:' in i:
+            finish = ''
+            end_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+            if not end_temp:
+                break
+            finish = convert_year(end_temp)
+            finish = datetime.strptime(finish, "%d/%m/%Y").date()
+
+            break
+
+    for j in text_data:
+        if 'REGISTRO DE INTERVEN' in j:
+            for i in range(len(tables_lc)):
+                if index_lc_[0] in tables_lc[i] and index_lc_[1] in tables_lc[i+1] and index_lc_[2] in tables_lc[i+2]:
+                    index.append((i+len(index_lc_)))
+
+        if 'CONSULTAS/EXAME/CIRURGIA' in j:
+            for i in range(len(tables_lc)):
+                if index_lc[0] in tables_lc[i] and index_lc[2] in tables_lc[i+2] and index_lc[3] in tables_lc[i+3]:
+                    index.append((i+len(index_lc)))
+
+    for i in range(len(tables_lc)):
+        if endindex_lc[0] in tables_lc[i] and endindex_lc[1] in tables_lc[i+1] and endindex_lc[2] in tables_lc[i+2]:
+            end_index.append(i)
+        if 'protocolo' in tables_lc[i]:
+            end_index.append(i)
+
+    if not index:
+        index = [len(tables_lc)]
+        min_ind = min(index)
+    else:
+        min_ind = min(index)
+
+    max_ind = min(end_index)
+
+    examslist_temp = tables_lc[min_ind:max_ind]
+
+    for i in range (len(examslist_temp)):
+        date_temp = examslist_temp[i]
+        if date_temp[:2].isdigit():
+            date_new = r.findall(r"\d{2}[./]\d{2}[./]\d{4}", date_temp)
+            if not date_new:
+                date_new = r.findall(r"\d{2}[./]\d{2}[./]\d{2}", date_temp)
+            if not date_new:
+                continue
+            exam_date = convert_year(date_new[0])
+            exam_date = datetime.strptime(exam_date, "%d/%m/%Y").date()
+
+            if not finish:
+                break
+
+            if finish > exam_date:
+                if not 'ista' in examslist_temp[i+1]:
+                    #print(examslist_temp[i+1])
+
+                    if examlist.find(examslist_temp[i+1]):
+                        examlist = examlist + str(examslist_temp[i+1]) + ';'
+
+    return (examlist)
+
 def get_examsperformed ():
     #this function get the exams performed during the interment
 
@@ -907,7 +987,7 @@ def organizer (tables_data):
 
     #print(tables_data)
 
-    new_table = ['s'] * 34
+    new_table = ['s'] * 35
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -949,34 +1029,36 @@ def organizer (tables_data):
             new_table[18] = i
         elif 'INTERNAÇÃO HOSPITALAR:' in i:
             new_table[19] = i
-        elif 'UNIDADE REFERENCIADA:' in i:
+        elif 'ATENDIMENTO RECEBIDO:' in i:
             new_table[20] = i
-        elif 'DESLOCAMENTO:' in i:
+        elif 'UNIDADE REFERENCIADA:' in i:
             new_table[21] = i
-        elif 'PARA:' in i:
+        elif 'DESLOCAMENTO:' in i:
             new_table[22] = i
-        elif 'MEIO DE TRANSPORTE:' in i:
+        elif 'PARA:' in i:
             new_table[23] = i
-        elif 'ACOMPANHANTE:' in i:
+        elif 'MEIO DE TRANSPORTE:' in i:
             new_table[24] = i
-        elif 'ALTA PROVISÓRIA:' in i:
+        elif 'ACOMPANHANTE:' in i:
             new_table[25] = i
-        elif 'DOENÇA NEGLIGENCIADA:' in i:
+        elif 'ALTA PROVISÓRIA:' in i:
             new_table[26] = i
-        elif 'DOENÇA SENSÍVEL' in i:
+        elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[27] = i
-        elif 'MOTIVO DOENÇA DE CONDI' in i:
+        elif 'DOENÇA SENSÍVEL' in i:
             new_table[28] = i
-        elif 'SITUAÇÃO DO PACIENTE:' in i:
+        elif 'MOTIVO DOENÇA DE CONDI' in i:
             new_table[29] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[30] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[31] = i
-        if 'MOTIVO DESIST:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[32] = i
-        elif 'CAMINHO:' in i:
+        if 'MOTIVO DESIST:' in i:
             new_table[33] = i
+        elif 'CAMINHO:' in i:
+            new_table[34] = i
     return new_table
 
 def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict , file_path):
@@ -1023,6 +1105,8 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict 
     tables_data.append(get_conditition(text_data))
 
     tables_data.append(get_internment(text_data))
+
+    tables_data.append(get_servicereceived (tables_data, raw_tables_data, text_data))
 
     tables_data.append(get_referencedunit(hospital_dict, tables_data, text_data))
 
