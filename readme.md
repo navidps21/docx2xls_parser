@@ -33,14 +33,18 @@ git clone https://github.com/navidps21/docx2xls_parser.git
 
 You must install two libraries in python.
 
-The first one is python-docx:
+- The first one is python-docx:
 
 ```
 pip install python-docx
 ```
 
-The second one, is xlwt:
+- The second one, is xlwt:
 
 ```
 pip install xlwt
 ```
+
+## Inicialization :rocket:
+
+Now, you are able to add .docx files and run the automation executing `run_code.bat`
