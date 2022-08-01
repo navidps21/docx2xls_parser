@@ -53,11 +53,14 @@ def get_tables_data (wordDoc):
 
         elif 'DATA DA ALTA:' in raw_data[i]:
             temp_data = raw_data[i].replace('.', '/')
+        
+        elif 'DESLOCAMENTO:' in raw_data[i]:
+            temp_data = 'DESLOCAMENTO: MANAUS'
 
         else:
             temp_data = raw_data[i]
 
-        temp_data = temp_data.replace("\n", ' ').replace('  ',' ')
+        temp_data = temp_data.replace("\n", ' ').replace('  ',' ').replace('\t',' ')
         
         if ':' in temp_data:
             data.append(temp_data)
@@ -743,8 +746,10 @@ def get_ethnicity(tables_data, ethnicity_dict):
             if j in i:
                 if 'etnia:' in i:
                     ethnicity = ethnicity + str(ethnicity_dict[j])
-                    indice = [i for i, s in enumerate(tables_data) if 'ETNIA:' in s]
-                    tables_data.insert(indice[0]+1, ethnicity)
+                    #indice = [i for i, s in enumerate(tables_data) if 'ETNIA:' in s]
+                    #tables_data.insert(indice[0]+1, ethnicity)
+
+                    tables_data.append(ethnicity)
                     return (tables_data)
 
     return (tables_data)
@@ -866,7 +871,7 @@ def get_servicereceived (tables_data, raw_tables_data, text_data) :
                     #print(examslist_temp[i+1])
 
                     if examlist.find(examslist_temp[i+1]):
-                        examlist = examlist + str(examslist_temp[i+1]) + ';'
+                        examlist = examlist + str(examslist_temp[i+1]).replace('\t', '') + ';'
 
     return (examlist)
 
@@ -1543,6 +1548,7 @@ hospital_dict = {
 
 ethnicity_dict = {
     'bare' : 'Baré',
+    'bara' : 'Baré',
     'kuripaco' : 'Koripako',
     'hupda' : 'Hupda',
     'ticuna' : 'Tikuna',
