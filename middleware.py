@@ -370,16 +370,49 @@ def get_neglecteddiseases (tables_data, text_data):
                 #neglected = neglected + 'S'
                 neglected = neglected + '1'
                 return (neglected)
-
-    #for i in new_text:
-    #    for j in neglecteddiseases:
-    #        if j in i:
-    #            neglected = neglected + 'S'
-    #            return (neglected)
     
     #neglected = neglected + 'N'
     neglected = neglected + '2'
     return (neglected)
+
+def get_neglecteddiseases_reason (tables_data, text_data):
+    #this function search neglected diseases in document
+
+    dict = {
+        'malaria' : 'MALÁRIA',
+        'doença de chagas' : 'DOENÇA DE CHAGAS',
+        'leishmaniose' : 'LEISHMANIOSE',
+        'tuberculose' : 'TUBERCULOSE',
+        'dengue' : 'DENGUE',
+        'hanseniase' : 'HANSENÍASE',
+        'esquistossomose' : 'ESQUISTOSSOMOSE',
+        'oncocercose' : 'ONCOCERCOSE',
+        'filariose' : 'FILARIOSE',
+        'tracoma' : 'TRACOMA',
+        'helmintos' : 'HELMINTOS',
+        'nematoides de solo' : 'NEMATÓIDES DE SOLO'
+    }
+
+    new_table = lowercase_table(tables_data)
+
+    new_text = lowercase_text(text_data)
+
+    #print(new_table)
+
+    neglected_reason = 'MOTIVO NEGLIGENCIADA: '
+
+    for i in new_table:
+        for j in dict:
+            if j in i:
+                if neglected_reason.find(str(dict[j])) == -1 :
+                    neglected_reason = neglected_reason + str(dict[j]) + '; '
+    for i in new_text:
+        for j in dict:
+            if j in i:
+                if neglected_reason.find(str(dict[j])) == -1 :
+                    neglected_reason = neglected_reason + str(dict[j]) + '; '
+
+    return neglected_reason
 
 def get_conditionsensitive (dict, tables_data, text_data):
     #this function search disease sensitive to primary condition
@@ -1012,7 +1045,7 @@ def organizer (tables_data):
 
     #print(tables_data)
 
-    new_table = ['s'] * 35
+    new_table = ['s'] * 36
     for i in tables_data:
         if 'ANO:' in i:
             new_table[0] = i
@@ -1070,20 +1103,22 @@ def organizer (tables_data):
             new_table[26] = i
         elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[27] = i
-        elif 'DOENÇA SENSÍVEL' in i:
+        elif 'MOTIVO NEGLIGENCIADA:' in i:
             new_table[28] = i
-        elif 'MOTIVO DOENÇA DE CONDI' in i:
+        elif 'DOENÇA SENSÍVEL' in i:
             new_table[29] = i
-        elif 'SITUAÇÃO DO PACIENTE:' in i:
+        elif 'MOTIVO DOENÇA DE CONDI' in i:
             new_table[30] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[31] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[32] = i
-        if 'MOTIVO DESIST:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[33] = i
-        elif 'CAMINHO:' in i:
+        if 'MOTIVO DESIST:' in i:
             new_table[34] = i
+        elif 'CAMINHO:' in i:
+            new_table[35] = i
     return new_table
 
 def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict , file_path):
@@ -1122,6 +1157,8 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict 
     tables_data = get_problemsolved(tables_data)
 
     tables_data.append(get_neglecteddiseases(tables_data, text_data))
+
+    tables_data.append(get_neglecteddiseases_reason(tables_data, text_data))
 
     tables_data.append(get_conditionsensitive(sensitive_dict, tables_data, text_data))
 
