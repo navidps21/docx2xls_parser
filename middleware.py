@@ -239,7 +239,7 @@ def get_entrydate (tables_data, text_data):
 def get_time (tables_data):
     #get time in hospital
 
-    time_data = 'TEMPO DE INTERNAÇÃO: '
+    time_data = 'TEMPO NA CASAI: '
 
     for i in tables_data:
         if 'DATA DO INGRESSO:' in i:
@@ -316,16 +316,20 @@ def get_companion(tables_data):
             lc_i = i.lower()
             companion_temp = str(r.findall(r':(.*)', lc_i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
             if 'acompanhante' in companion_temp:
-                companion = companion + "N"
+                #companion = companion + "N"
+                companion = companion + "2"
                 return companion
             elif len(companion_temp) >= 5:
-                companion = companion + "S"
+                #companion = companion + "S"
+                companion = companion + "1"
                 return companion
             elif not companion_temp:
-                companion = companion + "N"
+                #companion = companion + "N"
+                companion = companion + "2"
                 return companion        
             else:
-                companion = companion + "N"
+                #companion = companion + "N"
+                companion = companion + "2"
                 return companion
 
 def get_neglecteddiseases (tables_data, text_data):
@@ -355,11 +359,13 @@ def get_neglecteddiseases (tables_data, text_data):
     for j in neglecteddiseases:
         for i in new_text:
             if j in i:
-                neglected = neglected + 'S'
+                #neglected = neglected + 'S'
+                neglected = neglected + '1'
                 return (neglected)
         for i in new_table:
             if j in i:
-                neglected = neglected + 'S'
+                #neglected = neglected + 'S'
+                neglected = neglected + '1'
                 return (neglected)
 
     #for i in new_text:
@@ -368,7 +374,8 @@ def get_neglecteddiseases (tables_data, text_data):
     #            neglected = neglected + 'S'
     #            return (neglected)
     
-    neglected = neglected + 'N'
+    #neglected = neglected + 'N'
+    neglected = neglected + '2'
     return (neglected)
 
 def get_conditionsensitive (dict, tables_data, text_data):
@@ -383,15 +390,18 @@ def get_conditionsensitive (dict, tables_data, text_data):
     for i in new_table:
         for j in dict:
             if j in i:
-                conditionsensitive = conditionsensitive + 'S'
+                #conditionsensitive = conditionsensitive + 'S'
+                conditionsensitive = conditionsensitive + '1'
                 return (conditionsensitive)
     for i in new_text:
         for j in dict:
             if j in i:
-                conditionsensitive = conditionsensitive + 'S'
+                #conditionsensitive = conditionsensitive + 'S'
+                conditionsensitive = conditionsensitive + '1'
                 return (conditionsensitive)
     
-    conditionsensitive = conditionsensitive + 'N'
+    #conditionsensitive = conditionsensitive + 'N'
+    conditionsensitive = conditionsensitive + '2'
     return (conditionsensitive)
 
 def get_conditionsensitive_reason (dict, tables_data, text_data):
@@ -426,10 +436,12 @@ def get_giveup(text_data):
 
     for i in lc_text:
         if 'desist' in i:
-            giveup = giveup + "S"
+            #giveup = giveup + "S"
+            giveup = giveup + "1"
             return giveup
 
-    giveup = giveup + "N"
+    #giveup = giveup + "N"
+    giveup = giveup + "2"
     return giveup
 
 def get_giveup_reason(text_data):
@@ -455,10 +467,12 @@ def get_internment(text_data):
 
     for i in lc_text:
         if 'interna' in i:
-            internment = internment + "S"
+            #internment = internment + "S"
+            internment = internment + "1"
             return internment
 
-    internment = internment + "N"
+    #internment = internment + "N"
+    internment = internment + "2"
     return internment
 
 def get_referencedunit (dict, tables_data, text_data):
@@ -509,13 +523,16 @@ def get_provdischarge (text_data):
 
     for i in new_text:
         if 'paciente de alta provisoria para seu municipio de origem' in i:
-            provdischarge = provdischarge + "S"
+            #provdischarge = provdischarge + "S"
+            provdischarge = provdischarge + "1"
             return provdischarge
         if 'paciente segue de alta provisoria para seu municipio de origem' in i:
-            provdischarge = provdischarge + "S"
+            #provdischarge = provdischarge + "S"
+            provdischarge = provdischarge + "1"
             return provdischarge
 
-    provdischarge = provdischarge + "N"
+    #provdischarge = provdischarge + "N"
+    provdischarge = provdischarge + "2"
     return provdischarge
 
 def get_problemsolved (tables_data):
@@ -526,11 +543,14 @@ def get_problemsolved (tables_data):
         if 'ALTA PROVISÓRIA: N' in i:
             for i in tables_data:
                 if 'DESISTÊNCIA: S' in i:
-                    problemsolved = problemsolved + 'N'
+                    #problemsolved = problemsolved + 'N'
+                    problemsolved = problemsolved + '2'
                 if 'DESISTÊNCIA: N' in i:
-                    problemsolved = problemsolved + 'S'
+                    #problemsolved = problemsolved + 'S'
+                    problemsolved = problemsolved + '1'
         if 'ALTA PROVISÓRIA: S' in i:
-            problemsolved = problemsolved + 'N'
+            #problemsolved = problemsolved + 'N'
+            problemsolved = problemsolved + '2'
         
     indices = [i for i, s in enumerate(tables_data) if 'ALTA PROVISÓRIA:' in s]
     tables_data.insert(indices[0]+1, problemsolved)
@@ -1011,7 +1031,7 @@ def organizer (tables_data):
             new_table[9] = i
         elif 'DATA DA ALTA:' in i:
             new_table[10] = i
-        elif 'TEMPO DE INTERNAÇÃO:' in i:
+        elif 'TEMPO NA CASAI:' in i:
             new_table[11] = i
         elif 'DATA DO RETORNO:' in i:
             new_table[12] = i
@@ -1256,7 +1276,7 @@ specialist_dict = {
         'alergia e imunologia' : 'ALERGIA E IMUNOLOGIA',
         'anestesiologia' : 'ANESTESIOLOGIA',
         'angiologia' : 'ANGIOLOGIA',
-        'cardio' : 'CARDIOLOGISTA',
+        'cardiol' : 'CARDIOLOGISTA',
         'cirurgia cardiovascular' : 'CIRURGIA CARDIOVASCULAR',
         'cirurgia da mao' : 'CIRURGIA DA MÃO',
         'cirurgiao de cabeca e pescoco' : 'CIRURGIÃO DE CABEÇA E PESCOÇO',
@@ -1306,6 +1326,7 @@ specialist_dict = {
         'ortoped' : 'ORTOPEDISTA',
         'otorrino' : 'OTORRINOLARINGOLOGIA',
         'patolog' : 'PATOLOGIA',
+        'obstetr' : 'OBSTETRA',
         'patologia clínica/medicina laboratorial' : 'PATOLOGIA CLÍNICA/MEDICINA LABORATORIAL',
         'pediatria' : 'PEDIATRIA',
         'pneumolog' : 'PNEUMOLOGISTA',
