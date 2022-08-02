@@ -787,18 +787,20 @@ def get_ethnicity(tables_data, ethnicity_dict):
 
     return (tables_data)
 
-def get_ethnicities ():
+def get_dataintext (argument):
     #this function get the names of ethnicity
     abs_path = os.path.abspath(os.curdir)
 
     files = glob.glob(abs_path + '/**/*.docx', recursive=True)
 
-    ethnicity = 'ETNIAS: '
+    ethnicity = argument.upper() + ':'
 
-    f = open("ethnicity.txt","w+")
+    f = open(argument.replace(' ', '_') + ".txt","w+")
 
     issues = 0
     invalid = 0
+
+    argument = argument + ':'
 
     for file_path in range (len(files)):
 
@@ -816,7 +818,7 @@ def get_ethnicities ():
             tables_data = lowercase_table(tables_data)
             
             for i in tables_data:
-                if 'etnia:' in i:
+                if argument in i:
                         ethnicity_temp = str(r.findall(r':(.*)', i))
                         ethnicity_temp = ethnicity_temp.replace("[' ", "").replace("['", "").replace(" ']", "").replace("']", "")
 
