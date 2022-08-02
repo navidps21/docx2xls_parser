@@ -4,7 +4,7 @@ from middleware import *
 
 #Run the automation for all files
 
-#run_automation()
+run_automation()
 
 
 #**********************************************************
@@ -31,6 +31,6 @@ print ('Work done!')
 #**********************************************************
 #Get any collum data in the sheet
 
-get_dataintext ('meio de transporte')
+#get_dataintext ('meio de transporte')
 
-#get_examsperformed ()
+#get_examsperformed ('consulta', 1)

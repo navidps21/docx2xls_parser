@@ -910,16 +910,16 @@ def get_servicereceived (tables_data, raw_tables_data, text_data) :
 
     return (examlist)
 
-def get_examsperformed ():
+def get_examsperformed (argument, column_number):
     #this function get the exams performed during the interment
 
     abs_path = os.path.abspath(os.curdir)
 
     files = glob.glob(abs_path + '/**/*.docx', recursive=True)
 
-    examlist = 'EXAMES: '
+    examlist = argument.upper() + ': '
 
-    f = open("exams.txt","w+")
+    f = open(argument.replace(' ', '_') + ".txt","w+")
 
     issues = 0
     invalid = 0
@@ -941,6 +941,8 @@ def get_examsperformed ():
             raw_tables_data = get_raw_tables_data (wordDoc)
 
             text_data = get_text(wordDoc)
+
+            #column_number: 1 - consulta, 2 - medico, 3 - local
 
             index_lc = ['data', 'consulta', 'medico', 'local']
 
@@ -1008,11 +1010,11 @@ def get_examsperformed ():
                         break
 
                     if finish > exam_date:
-                        if not 'ista' in examslist_temp[i+1]:
-                            print(examslist_temp[i+1])
+                        if not 'ista' in examslist_temp[i + column_number]:
+                            print(examslist_temp[i + column_number])
 
-                            if examlist.find(examslist_temp[i+1]):
-                                examlist = examlist + str(examslist_temp[i+1]) + ';'
+                            if examlist.find(examslist_temp[i + column_number]):
+                                examlist = examlist + str(examslist_temp[i + column_number]) + ';'
 
     examlist = examlist.replace(';', "' : ''\r")
 
