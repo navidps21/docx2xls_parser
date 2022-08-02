@@ -11,9 +11,10 @@ run_automation()
 #Run the automation for one specific file
 
 """
+
 #Get document in path
 #file_path = 'data\CONTRA REF 2019\MAO\OUTUBRO\ARGEL PALHETA DE MENEZES.docx'
-file_path = 'data/CONTRA-REF. 2018/ARN/MAIO/RN GERLANIA EUGENIO GONÇALVES.docx'
+file_path = 'data/CONTRA-REF. 2018/ARN/SETEMBRO/INELDINA AZEVEDO ARAUJO.docx'
 
 wordDoc = Document(file_path)
 abs_path = os.path.abspath(os.curdir)

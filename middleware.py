@@ -768,7 +768,7 @@ def get_path(file_path):
     return (path)
 
 def get_ethnicity(tables_data, ethnicity_dict):
-    #this function apply a fix in ethniticity collun
+    #this function apply a fix in ethniticity column
 
     ethnicity = 'ETNIA: '
 
@@ -783,6 +783,68 @@ def get_ethnicity(tables_data, ethnicity_dict):
                     #tables_data.insert(indice[0]+1, ethnicity)
 
                     tables_data.append(ethnicity)
+                    return (tables_data)
+
+    return (tables_data)
+
+def get_dsei(tables_data):
+    #this function apply a fix in dsei column
+
+    dsei_dict = {
+        'alto rio negro' : 'ALTO RIO NEGRO',
+        'arn' : 'ALTO RIO NEGRO',
+        'alto rio solimoes' : 'ALTO RIO SOLIMÕES',
+        'alto solimões' : 'ALTO RIO SOLIMÕES',
+        'alto solimoes' : 'ALTO RIO SOLIMÕES',
+        'manaus' : 'MANAUS',
+        'medio purus' : 'MÉDIO RIO PURUS',
+        'medio solimoes' : 'MÉDIO RIO SOLIMÕES',
+        'parintins' : 'PARINTINS',
+        'vrj' : 'VALE DO JAVARI',
+        'vale do javari' : 'VALE DO JAVARI',
+        'arn/yan' : 'ALTO RIO NEGRO',
+        'mp' : 'MÉDIO RIO PURUS',
+        'ars' : 'ALTO RIO NEGRO',
+        'alto rio solimões' : 'ALTO RIO SOLIMÕES',
+        'mao' : 'MANAUS',
+        'ms' : 'MÉDIO RIO SOLIMÕES',
+        'medio rio purus' : 'MÉDIO RIO PURUS',
+        'mrs' : 'MÉDIO RIO SOLIMÕES',
+        'mrp' : 'MEDIO RIO PURUS',
+        'medio solimões' : 'MÉDIO RIO SOLIMÕES',
+        'mrsa' : 'MÉDIO RIO SOLIMÕES E AFLUENTES',
+        'vj' : 'VALE DO JAVARI',
+        'yanomami' : 'YANOMAMI',
+        'chico camilo' : '?',
+        'alto rio negro.' : 'ALTO RIO NEGRO',
+        'tonantins' : 'ALTO RIO SOLIMÕES',
+        'alro solimões' : 'ALTO RIO SOLIMÕES',
+        'alto soli mões' : 'ALTO RIO SOLIMÕES',
+        'alvaraes' : 'MÉDIO RIO SOLIMÕES',
+        'autazes' : 'MANAUS',
+        'rmp' : 'MÉDIO RIO PURUS',
+        'medio rio solimões' : 'MÉDIO RIO SOLIMÕES',
+        'medio rio solimoes' : 'MÉDIO RIO SOLIMÕES',
+        'm. rio solimoes' : 'MÉDIO RIO SOLIMÕES',
+        'medio rio solimôes' : 'MÉDIO RIO SOLIMÕES',
+        'medio solimoes.' : 'MÉDIO RIO SOLIMÕES',
+        'vale do rio javari' : 'VALE DO JAVARI',
+        'v. do javari' : 'VALE DO JAVARI'
+    }
+
+    dsei = 'DSEI DE ORIGEM: '
+
+    lc_table = lowercase_table (tables_data)
+
+    for i in lc_table:
+        for j in dsei_dict:
+            if j in i:
+                if 'dsei de origem:' in i:
+                    dsei = dsei + str(dsei_dict[j])
+                    #indice = [i for i, s in enumerate(tables_data) if 'ETNIA:' in s]
+                    #tables_data.insert(indice[0]+1, dsei)
+
+                    tables_data.append(dsei)
                     return (tables_data)
 
     return (tables_data)
@@ -1143,6 +1205,8 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict 
     tables_data = get_entrydate(tables_data, text_data)
 
     tables_data = get_ethnicity(tables_data, ethnicity_dict)
+
+    tables_data = get_dsei(tables_data)
 
     tables_data = get_age(tables_data)
 
