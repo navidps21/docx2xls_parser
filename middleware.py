@@ -849,6 +849,195 @@ def get_dsei(tables_data):
 
     return (tables_data)
 
+def get_to(tables_data):
+    #this function apply a fix in para column
+
+    to_dict = {
+        'sao gabriel da cachoeira' : 'São Gabriel da Cachoeira',
+        'sao gabreil da cachoeira' : 'São Gabriel da Cachoeira',
+        'tabatinga' : 'Tabatinga',
+        'autazes' : 'Autazes',
+        'rio preto da eva' : 'Rio Preto da Eva',
+        'nova olinda do norte' : 'Nova Olinda do Norte',
+        'borba' : 'Borba',
+        'urucara' : 'Urucará',
+        'labrea' : 'Lábrea',
+        'tefe' : 'Tefé',
+        'maues' : 'Maués',
+        'barreirinha' : 'Barreirinha',
+        'atalaia do norte' : 'Atalaia do Norte',
+        'santa isabel do rio negro' : 'Santa Isabel do Rio Negro',
+        'barcelos' : 'Barcelos',
+        'sao gabriel dacachoeira' : 'São Gabriel da Cachoeira',
+        'sao gabriel da cachoeiro' : 'São Gabriel da Cachoeira',
+        'franciane moreira' : '?',
+        'benjamin constant' : 'Benjamin Constant',
+        'sao paulo de olivenca' : 'São Paulo de Olivença',
+        'santo antonio do ica' : 'Santo Antônio do Içá',
+        'benjamim constant' : 'Benjamin Constant',
+        'tonantins' : 'Tonantins',
+        'amatura' : 'Amaturá',
+        's.p. de olivenca' : 'São Paulo de Olivença',
+        'manacapuru' : 'Manacapuru',
+        'itacoatiara' : 'Itacoatiara',
+        'manicore' : 'Manicoré',
+        'silves' : 'Silves',
+        'anama' : 'Anama',
+        'beruri' : 'Beruri',
+        'com. nsra da saude' : 'Manaus',
+        'pb nsra da saude' : 'Manaus',
+        'manaus' : 'Manaus',
+        'careiro castanho' : 'Careiro Castanho',
+        'polo base nsra da saude' : 'Manaus',
+        'autazez' : 'Autazes',
+        'nossa senhora da saude' : 'Manaus',
+        'manaus / polo base' : 'Manaus',
+        'careiro da varzea' : 'Careiro da Várzea',
+        'polo base nossa senhora da saude' : 'Manaus',
+        'taruma acu' : 'Manaus',
+        'manaquiri' : 'Manaquiri',
+        'jutai' : 'Jutaí',
+        'tapaua' : 'Tapauá',
+        'japura' : 'Japurá',
+        'eirunepe' : 'Eirunepé',
+        'jurua' : 'Juruá',
+        'fonte boa' : 'Fonte Boa',
+        'ipixuna' : 'Ipixuna',
+        'maraa' : 'Maraã',
+        'parintins' : 'Parintins',
+        'santo antõnio do ica' : 'Santo Antônio do Içá',
+        'n.o.n' : 'Nova Olinda do Norte',
+        'barreitinha' : 'Barreirinha',
+        'sgc' : 'São Gabriel da Cachoeira',
+        'sao gabariel da cachoeira' : 'São Gabriel da Cachoeira',
+        'boa vista do ramos' : 'Boa Vista do Ramos',
+        'vale do javari' : '?',
+        'manaus (paricatuba)' : 'Manaus',
+        'itacotiara' : 'Itacoatiara',
+        'carauari' : 'Carauari',
+        'atalai ado norte' : 'Atalaia do Norte',
+        'tocantins' : 'Tocantins',
+        'santo antônio do ica' : 'Santo Antônio do Içá',
+        'parinrins' : 'Parintins',
+        'nhamunda' : 'Nhamundá',
+        'sao gabriel da cahoeira' : 'São Gabriel da Cachoeira',
+        'santa izabel do rio negro' : 'Santa Isabel do Rio Negro',
+        'sao gabriel cachoeira' : 'São Gabriel da Cachoeira',
+        'sao gabriel da cacheoira' : 'São Gabriel da Cachoeira',
+        's ao gabriel da cachoeira' : 'São Gabriel da Cachoeira',
+        'sao gabril da cachoeira' : 'São Gabriel da Cachoeira',
+        'saõ gabriel da cachoeira' : 'São Gabriel da Cachoeira',
+        'tonatins' : 'Tonantins',
+        'santo antonio de ica' : 'Santo Antônio do Içá',
+        'beijamin constant' : 'Benjamin Constant',
+        'alvaraes' : 'Alvarães',
+        'benjamin constante' : 'Benjamin Constant',
+        'rio reto da eva' : 'Rio Preto da Eva',
+        'rio preto d eva' : 'Rio Preto da Eva',
+        'autazes / pantaleao' : 'Autazes',
+        'manocore' : 'Manicoré',
+        'novo olinda do norte' : 'Nova Olinda do Norte',
+        'carreiro castanho' : 'Careiro Castanho',
+        'novo airao' : 'Novo Airão',
+        'canutama' : 'Canutama',
+        'itamarati' : 'Itamarati',
+        'coari' : 'Coari',
+        'japura-tefe' : '?',
+        'uarini' : 'Uarini',
+        'eurunepe' : 'Eirunepé',
+        'inhamunda' : 'Nhamundá',
+        '' : ''
+    }
+
+    to = 'PARA: '
+
+    lc_table = lowercase_table (tables_data)
+
+    for i in lc_table:
+        for j in to_dict:
+            if j in i:
+                if 'para:' in i:
+                    to = to + str(to_dict[j])
+                    #indice = [i for i, s in enumerate(tables_data) if 'ETNIA:' in s]
+                    #tables_data.insert(indice[0]+1, to)
+
+                    tables_data.append(to)
+                    return (tables_data)
+
+    return (tables_data)
+
+def get_transport(tables_data):
+    #this function apply a fix in transport column
+
+    transport_dict = {
+        'fluvial' : 'fluvial',
+        'ajato' : 'fluvial',
+        'terrestre' : 'terrestre',
+        'expresso' : 'fluvial',
+        'barco com camarote/aereo ou a jato' : '?',
+        'aereo' : 'aéreo',
+        'aereo/fluvial.' : 'aéreo e fluvial',
+        'aereo/barco(camarote)' : 'fluvial e aéreo',
+        'aereo/lancha à jato' : 'fluvial e aéreo',
+        'fluvial/aereo' : 'fluvial e aéreo',
+        'fluvial /ajato' : 'fluvial',
+        'barco' : 'fluvial',
+        'rodoviario' : 'terrestre',
+        'terrestre/fluvial' : 'terrestre e fluvial',
+        'fluvial/terrestre' : 'fluvial e terrestre',
+        'fluvial/aereo/terrestre' : 'fluvial, aéreo e terrestre',
+        'terrestre/aereo/fluvial' : 'fluvial, aéreo e terrestre',
+        'fluvial/aereo.' : 'fluvial e aéreo',
+        'aereo, lancha a jato ou barco com camarote' : 'fluvial e aéreo',
+        'f luvial/ terrestre' : 'terrestre e fluvial',
+        'lancha ajato' : 'fluvial',
+        'expesso' : 'fluvial',
+        'via aereo' : 'aéreo',
+        'expresso obs: paciente especial de colo com paralisia cerebral' : 'fluvial',
+        'fluvial barco' : 'fluvial',
+        'expresso obs.: paciente gravida' : 'fluvial',
+        'expresso obs: paciente oncologico em tratamento' : 'fluvial',
+        'fluvial/barco' : 'fluvial',
+        'expresso obs: paciente gravida' : 'fluvial',
+        'expresso obs.: paciente pos transplante de cornea' : 'fluvial',
+        'expresso/ crianca de colo chorosa devido a patologia' : 'fluvial',
+        'expresso / por conta do diagnostico de c.a' : 'fluvial',
+        'expresso obs: paciente em uso de bolsa de colostomia' : 'fluvial',
+        'barco de linha' : 'fluvial',
+        'fluvial expresso' : 'fluvial',
+        'expresso obs: crianca de colo cardiopata' : 'fluvial',
+        'expresso obs: paciente idoso, pos cirurgico de amputacao de membro (cid n35)' : 'fluvial',
+        'expresso paciente de colo com icc' : 'fluvial',
+        'expresso obs: paciente cardiopata-especial' : 'fluvial',
+        'expresso obs. com crianca de colo' : 'fluvial',
+        'fluvial ou carona aerea' : '?',
+        'expresso obs. paciente debilitado' : 'fluvial',
+        'fluvial ou carona aereo' : 'fluvial',
+        'expresso/ paciente em uso de medicacões injetaveis de 3 em 3 dias.' : 'fluvial',
+        'expresso crianca realizou cirurgia' : 'fluvial',
+        'expresso crianca realizou cirurgia.' : 'fluvial',
+        'a criterio do dsei' : '?',
+        'expresso/fluvial em leito ou aereo' : '?',
+        '--' : '',
+    }
+
+    transport = 'MEIO DE TRANSPORTE: '
+
+    lc_table = lowercase_table (tables_data)
+
+    for i in lc_table:
+        for j in transport_dict:
+            if j in i:
+                if 'meio de transporte:' in i:
+                    transport = transport + str(transport_dict[j])
+                    #indice = [i for i, s in enumerate(tables_data) if 'ETNIA:' in s]
+                    #tables_data.insert(indice[0]+1, transport)
+
+                    tables_data.append(transport)
+                    return (tables_data)
+
+    return (tables_data)
+
 def get_dataintext (argument):
     #this function get the names of ethnicity
     abs_path = os.path.abspath(os.curdir)
@@ -1207,6 +1396,10 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, hospital_dict 
     tables_data = get_ethnicity(tables_data, ethnicity_dict)
 
     tables_data = get_dsei(tables_data)
+
+    tables_data = get_to(tables_data)
+
+    tables_data = get_transport(tables_data)
 
     tables_data = get_age(tables_data)
 
