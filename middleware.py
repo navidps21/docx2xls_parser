@@ -1161,7 +1161,7 @@ def get_servicereceived (tables_data, raw_tables_data, text_data) :
 
     return (examlist)
 
-def get_examsperformed (argument, column_number):
+def get_examsperformed (argument):
     #this function get the exams performed during the interment
 
     abs_path = os.path.abspath(os.curdir)
@@ -1261,11 +1261,14 @@ def get_examsperformed (argument, column_number):
                         break
 
                     if finish > exam_date:
-                        if not 'ista' in examslist_temp[i + column_number]:
-                            print(examslist_temp[i + column_number])
+                        if not 'ista' in examslist_temp:
+                            #print(examslist_temp)
 
-                            if examlist.find(examslist_temp[i + column_number]):
-                                examlist = examlist + str(examslist_temp[i + column_number]) + ';'
+                            for i in range (len(examslist_temp)):
+                                if not '18' in examslist_temp[i] and not '19' in examslist_temp[i] and not '20' in examslist_temp[i] and not '21' in examslist_temp[i] and not '17' in examslist_temp[i]:
+                                    if examlist.find(str(examslist_temp[i])) == -1 :
+                                        print(examslist_temp[i])
+                                        examlist = examlist + str(examslist_temp[i]) + ';'
 
     examlist = examlist.replace(';', "' : ''\r")
 
