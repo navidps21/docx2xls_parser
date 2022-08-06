@@ -182,7 +182,7 @@ def get_gender ():
 def get_age (tables_data):
     #get age between birth and document date
 
-    age_data = 'IDADE: '
+    age_data = 'VIDADE: '
 
     for i in tables_data:
         if 'DN:' in i:
@@ -1077,6 +1077,69 @@ def get_dataintext (argument):
                             ethnicity = ethnicity + ethnicity_temp + ';'
 
                             print(ethnicity_temp)
+    
+    
+    ethnicity = ethnicity.replace(';', "' : ''\r")
+
+    f.write ('%s' %ethnicity)
+
+def get_dataintext_adult (argument):
+    #this function get the names of ethnicity
+    abs_path = os.path.abspath(os.curdir)
+
+    files = glob.glob(abs_path + '/**/*.docx', recursive=True)
+
+    ethnicity = argument.upper() + ':'
+
+    f = open(argument.replace(' ', '_') + ".txt","w+")
+
+    issues = 0
+    invalid = 0
+
+    argument = argument + ':'
+
+    for file_path in range (len(files)):
+
+        temp = files[file_path].split('\\')[-1]
+    
+        if '~$' in temp[:2]:
+            issues = issues + 1
+        if '$~' in temp[:2]:
+            invalid = invalid + 1
+        else:
+            wordDoc = Document(files[file_path])
+            #print(files[file_path])
+            tables_data = get_tables_data(wordDoc)
+
+            text_data = get_text(wordDoc)
+
+            raw_tables_data = get_raw_tables_data (wordDoc)
+
+            tables_data = get_entrydate(tables_data, text_data)
+
+            tables_data = get_age(tables_data)
+
+            tables_data.append(get_servicereceived (tables_data, raw_tables_data, text_data))
+
+            tables_data = lowercase_table(tables_data)
+            
+            for j in tables_data:
+                if 'vidade:' in j:
+                    age_temp = (r.findall(r':(.*)', j))
+                    age_temp = age_temp[0].replace(' ', '')
+                    if age_temp:
+                        age_temp = int(age_temp)
+                    if isinstance(age_temp, int):
+                        if age_temp >= 18:
+                            for i in tables_data:
+                                if argument in i:
+                                    ethnicity_temp = str(r.findall(r':(.*)', i))
+                                    ethnicity_temp = ethnicity_temp.replace("[' ", "").replace("['", "").replace(" ']", "").replace("']", "")
+
+                                    if ethnicity.find(ethnicity_temp) == -1 :
+                                        ethnicity = ethnicity + ethnicity_temp + ';'
+
+                                        print(ethnicity_temp)
     
     
     ethnicity = ethnicity.replace(';', "' : ''\r")
