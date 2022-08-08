@@ -243,7 +243,7 @@ def get_entrydate (tables_data, text_data):
 def get_time (tables_data):
     #get time in hospital
 
-    time_data = 'TEMPO NA CASAI: '
+    time_data = 'TEMPO NA CASAI (EM DIAS): '
 
     for i in tables_data:
         if 'DATA DO INGRESSO:' in i:
@@ -728,7 +728,7 @@ def get_returndate (tables_data, raw_tablesdata, text_data):
 def get_deltareturndate (tables_data):
     #get time between provisional discharge and return date
 
-    time_data = 'TEMPO ALTA-RETORNO: '
+    time_data = 'TEMPO ALTA-RETORNO (EM DIAS): '
 
     for i in tables_data:
         if 'DATA DA ALTA:' in i:
