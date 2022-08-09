@@ -1040,6 +1040,23 @@ def get_transport(tables_data):
 
     return (tables_data)
 
+def get_scheduledreturn (tables_data):
+    #this function return if return date were scheduled
+
+    scheduledreturn = 'RETORNO AGENDADO: '
+
+    for i in tables_data:
+        if 'DATA DO RETORNO: ' in i:
+            return_temp = str(r.findall(r':(.*)', i)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
+            if (len(return_temp)) <= 4:
+                #scheduledreturn = scheduledreturn + 'N'
+                scheduledreturn = scheduledreturn + '2'
+            else:
+                #scheduledreturn = scheduledreturn + 'S'
+                scheduledreturn = scheduledreturn + '1'            
+
+    return (scheduledreturn)
+
 def get_dataintext (argument):
     #this function get the names of ethnicity
     abs_path = os.path.abspath(os.curdir)
@@ -1378,7 +1395,7 @@ def organizer (tables_data):
 
     #print(tables_data)
 
-    new_table = ['s'] * 37
+    new_table = ['s'] * 38
     
     for i in tables_data:
         if 'ANO:' in i:
@@ -1403,58 +1420,60 @@ def organizer (tables_data):
             new_table[9] = i
         elif 'DATA DA ALTA:' in i:
             new_table[10] = i
-        elif 'TEMPO NA CASAI:' in i:
+        elif 'TEMPO NA CASAI (EM DIAS):' in i:
             new_table[11] = i
-        elif 'DATA DO RETORNO:' in i:
+        elif 'RETORNO AGENDADO:' in i:
             new_table[12] = i
-        elif 'TEMPO ALTA-RETORNO:' in i:
+        elif 'DATA DO RETORNO:' in i:
             new_table[13] = i
-        elif 'MOTIVO RETORNO:' in i:
+        elif 'TEMPO ALTA-RETORNO (EM DIAS):' in i:
             new_table[14] = i
-        elif 'HD:' in i:
+        elif 'MOTIVO RETORNO:' in i:
             new_table[15] = i
-        elif 'ESPECIALIDADES:' in i:
+        elif 'HD:' in i:
             new_table[16] = i
-        elif 'CONDIÇÃO DO INGRESSO:' in i:
+        elif 'ESPECIALIDADES:' in i:
             new_table[17] = i
-        elif 'CONDIÇÃO DO EGRESSO:' in i:
+        elif 'CONDIÇÃO DO INGRESSO:' in i:
             new_table[18] = i
-        elif 'INTERNAÇÃO HOSPITALAR:' in i:
+        elif 'CONDIÇÃO DO EGRESSO:' in i:
             new_table[19] = i
-        elif 'ATENDIMENTOS RECEBIDOS:' in i:
+        elif 'INTERNAÇÃO HOSPITALAR:' in i:
             new_table[20] = i
-        elif 'ATENDIMENTO RECEBIDO:' in i:
+        elif 'ATENDIMENTOS RECEBIDOS:' in i:
             new_table[21] = i
-        elif 'UNIDADE REFERENCIADA:' in i:
+        elif 'ATENDIMENTO RECEBIDO:' in i:
             new_table[22] = i
-        elif 'DESLOCAMENTO:' in i:
+        elif 'UNIDADE REFERENCIADA:' in i:
             new_table[23] = i
-        elif 'PARA:' in i:
+        elif 'DESLOCAMENTO:' in i:
             new_table[24] = i
-        elif 'MEIO DE TRANSPORTE:' in i:
+        elif 'PARA:' in i:
             new_table[25] = i
-        elif 'ACOMPANHANTE:' in i:
+        elif 'MEIO DE TRANSPORTE:' in i:
             new_table[26] = i
-        elif 'ALTA PROVISÓRIA:' in i:
+        elif 'ACOMPANHANTE:' in i:
             new_table[27] = i
-        elif 'DOENÇA NEGLIGENCIADA:' in i:
+        elif 'ALTA PROVISÓRIA:' in i:
             new_table[28] = i
-        elif 'MOTIVO NEGLIGENCIADA:' in i:
+        elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[29] = i
-        elif 'DOENÇA SENSÍVEL' in i:
+        elif 'MOTIVO NEGLIGENCIADA:' in i:
             new_table[30] = i
-        elif 'MOTIVO DOENÇA DE CONDI' in i:
+        elif 'DOENÇA SENSÍVEL' in i:
             new_table[31] = i
-        elif 'SITUAÇÃO DO PACIENTE:' in i:
+        elif 'MOTIVO DOENÇA DE CONDI' in i:
             new_table[32] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[33] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[34] = i
-        if 'MOTIVO DESIST:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[35] = i
-        elif 'CAMINHO:' in i:
+        if 'MOTIVO DESIST:' in i:
             new_table[36] = i
+        elif 'CAMINHO:' in i:
+            new_table[37] = i
     return new_table
 
 def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, servicereceived_dict, hospital_dict , file_path):
@@ -1515,6 +1534,8 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, servicereceive
     tables_data.append(get_referencedunit(hospital_dict, tables_data, text_data))
 
     tables_data = get_returndate(tables_data, raw_tables_data, text_data)
+
+    tables_data.append(get_scheduledreturn(tables_data))
 
     tables_data = get_deltareturndate(tables_data)
 
