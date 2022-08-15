@@ -21,7 +21,7 @@ abs_path = os.path.abspath(os.curdir)
 abs_path = abs_path + '/' + file_path
 
 #Get data from the tables and text
-tables_data = get_data(wordDoc, ethnicity_dict, specialist_dict, conditionsensitive_dict, servicereceived_dict, hospital_dict, abs_path)
+tables_data = get_data(wordDoc, ethnicity_dict, specialist_dict, conditionsensitive_dict, servicereceived_dict, hd_dict, hospital_dict, abs_path)
 create_sheet(tables_data)
 
 print ('Work done!')

@@ -968,6 +968,24 @@ def get_to(tables_data):
 
     return (tables_data)
 
+def get_hd (tables_data, hd_dict):
+
+    hd = 'HD: '
+
+    lc_table = lowercase_table (tables_data)
+
+    for i in lc_table:
+        for j in hd_dict:
+            if j in i:
+                if hd.find(str(hd_dict[j])) == -1 :
+                    hd = hd + str(hd_dict[j]) + '; '
+    
+                    #indice = [i for i, s in enumerate(tables_data) if 'HD:' in s]
+                    #tables_data.insert(indice[0], hd)
+                    tables_data.append(hd)
+
+    return (tables_data)
+
 def get_transport(tables_data):
     #this function apply a fix in transport column
 
@@ -1476,7 +1494,7 @@ def organizer (tables_data):
             new_table[37] = i
     return new_table
 
-def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, servicereceived_dict, hospital_dict , file_path):
+def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, servicereceived_dict, hd_dict, hospital_dict , file_path):
     #generate tables_data
     
     tables_data = get_tables_data(wordDoc)
@@ -1498,6 +1516,8 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, servicereceive
     tables_data = get_dsei(tables_data)
 
     tables_data = get_to(tables_data)
+
+    tables_data = get_hd(tables_data, hd_dict)
 
     tables_data = get_transport(tables_data)
 
@@ -1582,7 +1602,7 @@ def run_automation():
         else:
             wordDoc = Document(files[file_path])
             #print(files[file_path])
-            tables_data = get_data(wordDoc, ethnicity_dict, specialist_dict, conditionsensitive_dict, servicereceived_dict, hospital_dict, files[file_path])
+            tables_data = get_data(wordDoc, ethnicity_dict, specialist_dict, conditionsensitive_dict, servicereceived_dict, hd_dict, hospital_dict, files[file_path])
 
             for j in tables_data:
                 specs_temp = str(r.findall(r'(.*):', j)).replace("[' ", '').replace(" ']", '').replace("['", '').replace("']", '')
