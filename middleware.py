@@ -968,21 +968,21 @@ def get_to(tables_data):
 
     return (tables_data)
 
-def get_hd (tables_data, hd_dict):
+def get_cid (tables_data, hd_dict):
 
-    hd = 'HD: '
+    cid = 'CID: '
 
     lc_table = lowercase_table (tables_data)
 
     for i in lc_table:
         for j in hd_dict:
             if j in i:
-                if hd.find(str(hd_dict[j])) == -1 :
-                    hd = hd + str(hd_dict[j]) + '; '
+                if cid.find(str(hd_dict[j])) == -1 :
+                    cid = cid + str(hd_dict[j]) + '; '
     
                     #indice = [i for i, s in enumerate(tables_data) if 'HD:' in s]
-                    #tables_data.insert(indice[0], hd)
-                    tables_data.append(hd)
+                    #tables_data.insert(indice[0], cid)
+                    tables_data.append(cid)
 
     return (tables_data)
 
@@ -1413,7 +1413,7 @@ def organizer (tables_data):
 
     #print(tables_data)
 
-    new_table = ['s'] * 38
+    new_table = ['s'] * 39
     
     for i in tables_data:
         if 'ANO:' in i:
@@ -1448,50 +1448,52 @@ def organizer (tables_data):
             new_table[14] = i
         elif 'MOTIVO RETORNO:' in i:
             new_table[15] = i
-        elif 'HD:' in i:
+        elif 'CID:' in i:
             new_table[16] = i
-        elif 'ESPECIALIDADES:' in i:
+        elif 'HD:' in i:
             new_table[17] = i
-        elif 'CONDIÇÃO DO INGRESSO:' in i:
+        elif 'ESPECIALIDADES:' in i:
             new_table[18] = i
-        elif 'CONDIÇÃO DO EGRESSO:' in i:
+        elif 'CONDIÇÃO DO INGRESSO:' in i:
             new_table[19] = i
-        elif 'INTERNAÇÃO HOSPITALAR:' in i:
+        elif 'CONDIÇÃO DO EGRESSO:' in i:
             new_table[20] = i
-        elif 'ATENDIMENTOS RECEBIDOS:' in i:
+        elif 'INTERNAÇÃO HOSPITALAR:' in i:
             new_table[21] = i
-        elif 'ATENDIMENTO RECEBIDO:' in i:
+        elif 'ATENDIMENTOS RECEBIDOS:' in i:
             new_table[22] = i
-        elif 'UNIDADE REFERENCIADA:' in i:
+        elif 'ATENDIMENTO RECEBIDO:' in i:
             new_table[23] = i
-        elif 'DESLOCAMENTO:' in i:
+        elif 'UNIDADE REFERENCIADA:' in i:
             new_table[24] = i
-        elif 'PARA:' in i:
+        elif 'DESLOCAMENTO:' in i:
             new_table[25] = i
-        elif 'MEIO DE TRANSPORTE:' in i:
+        elif 'PARA:' in i:
             new_table[26] = i
-        elif 'ACOMPANHANTE:' in i:
+        elif 'MEIO DE TRANSPORTE:' in i:
             new_table[27] = i
-        elif 'ALTA PROVISÓRIA:' in i:
+        elif 'ACOMPANHANTE:' in i:
             new_table[28] = i
-        elif 'DOENÇA NEGLIGENCIADA:' in i:
+        elif 'ALTA PROVISÓRIA:' in i:
             new_table[29] = i
-        elif 'MOTIVO NEGLIGENCIADA:' in i:
+        elif 'DOENÇA NEGLIGENCIADA:' in i:
             new_table[30] = i
-        elif 'DOENÇA SENSÍVEL' in i:
+        elif 'MOTIVO NEGLIGENCIADA:' in i:
             new_table[31] = i
-        elif 'MOTIVO DOENÇA DE CONDI' in i:
+        elif 'DOENÇA SENSÍVEL' in i:
             new_table[32] = i
-        elif 'SITUAÇÃO DO PACIENTE:' in i:
+        elif 'MOTIVO DOENÇA DE CONDI' in i:
             new_table[33] = i
-        elif 'PROBLEMA RESOLVIDO:' in i:
+        elif 'SITUAÇÃO DO PACIENTE:' in i:
             new_table[34] = i
-        elif 'DESISTÊNCIA:' in i:
+        elif 'PROBLEMA RESOLVIDO:' in i:
             new_table[35] = i
-        if 'MOTIVO DESIST:' in i:
+        elif 'DESISTÊNCIA:' in i:
             new_table[36] = i
-        elif 'CAMINHO:' in i:
+        if 'MOTIVO DESIST:' in i:
             new_table[37] = i
+        elif 'CAMINHO:' in i:
+            new_table[38] = i
     return new_table
 
 def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, servicereceived_dict, hd_dict, hospital_dict , file_path):
@@ -1517,7 +1519,7 @@ def get_data (wordDoc, ethnicity_dict, spec_dict, sensitive_dict, servicereceive
 
     tables_data = get_to(tables_data)
 
-    tables_data = get_hd(tables_data, hd_dict)
+    tables_data = get_cid(tables_data, hd_dict)
 
     tables_data = get_transport(tables_data)
 
