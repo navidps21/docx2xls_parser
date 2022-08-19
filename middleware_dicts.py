@@ -233,6 +233,7 @@ hospital_dict = {
     'caic jose carlos mestrinho' : 'CAIC JOSÉ CARLOS MESTRINHO',
     'caic dr. edson melo' : 'CAIC DR. EDSON MELO',
     'caic dr. afrânio soares' : 'CAIC DR. AFRÂNIO SOARES',
+    'caic p10' : 'CAIC DR. AFRÂNIO SOARES',
     'caic alberto carreira' : 'CAIC ALBERTO CARREIRA',
     'caic dra. josephina de mello' : 'CAIC ALEXANDRE MONTORIL',
     'maternidade cidade nova dona nazira daou' : 'MATERNIDADE CIDADE NOVA DONA NAZIRA DAOU',
@@ -299,7 +300,9 @@ hospital_dict = {
     'polic.gilberto mestrinho' : 'POLICLÍNICA GOVERNADOR GILBERTO MESTRINHO',
     'hps da crianca zona leste' : 'HPS DA CRIANÇA - ZONA LESTE',
     'hps da crianca zona oeste' : 'HPS DA CRIANÇA - ZONA OESTE',
+    'ps da crianca zona oeste' : 'HPS DA CRIANÇA - ZONA OESTE',
     'hps da crianca zona sul' : 'HPS DA CRIANÇA - ZONA SUL',
+    'pronto socorro da crianca zona sul' : 'HPS DA CRIANÇA - ZONA SUL',
     'hps zona sul' : 'HPS DA CRIANÇA - ZONA SUL',
     'fcecon' : 'FUNDAÇÃO CECON',
     'fundacao cecon' : 'FUNDAÇÃO CECON',
@@ -2104,5 +2107,6 @@ hd_dict = {
 	'gastrite crônica' : 'XI - Doenças do aparelho digestivo',
 	'tumor no intestino a/e' : 'II - Neoplasmas [tumores]',
 	'cardiomegalia' : 'IX - Doenças do aparelho circulatório',
+	'fratura' : 'XIX - Lesões, envenenamentos e algumas outras conseqüências de causas externas',
 	'câncer do color de utero' : 'II- Neoplasmas [tumores]'
 }
