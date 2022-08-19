@@ -1764,7 +1764,7 @@ hd_dict = {
 	'fratura de colo de femur direito' : 'XIX - Lesões, envenenamentos e algumas outras consequências de causas externas',
 	'lupos eritematoso' : 'XII - Doenças da pele e do tecido subcutâneo',
 	'doenca hepatica' : 'XI - Doenças do aparelho digestivo',
-	'hiperplasia da prostata' : 'hiperplasia da prostata',
+	'hiperplasia da prostata' : 'XIV - Doenças do aparelho geniturinário',
 	'epididimite' : 'XIV - Doenças do aparelho geniturinário',
 	'vitima de acidente de trânsito' : 'XX - Causas externas de morbidade e de mortalidade',
 	'neoplasia labial' : 'II - Neoplasmas [tumores]',
