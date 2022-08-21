@@ -341,9 +341,10 @@ def get_neglecteddiseases (tables_data, text_data):
 
     neglecteddiseases = [
         'malaria',
-        'doença de Chagas',
+        'doenca de Chagas',
         'leishmaniose',
         'tuberculose',
+        'tb',
         'dengue',
         'hanseniase',
         'esquistossomose',
@@ -381,9 +382,10 @@ def get_neglecteddiseases_reason (tables_data, text_data):
 
     dict = {
         'malaria' : 'MALÁRIA',
-        'doença de chagas' : 'DOENÇA DE CHAGAS',
+        'doenca de chagas' : 'DOENÇA DE CHAGAS',
         'leishmaniose' : 'LEISHMANIOSE',
         'tuberculose' : 'TUBERCULOSE',
+        'tb' : 'TUBERCULOSE',
         'dengue' : 'DENGUE',
         'hanseniase' : 'HANSENÍASE',
         'esquistossomose' : 'ESQUISTOSSOMOSE',
