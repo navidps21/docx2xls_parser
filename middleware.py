@@ -1022,6 +1022,9 @@ def get_cid (tables_data, hd_dict):
                     #tables_data.insert(indice[0], cid)
                     tables_data.append(cid)
 
+    if cid in 'CID: ':
+        tables_data.append(cid)
+
     return (tables_data)
 
 def get_transport(tables_data):
