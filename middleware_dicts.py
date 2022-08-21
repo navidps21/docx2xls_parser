@@ -1616,6 +1616,7 @@ hd_dict = {
 	'dorsalgia' : 'XIII - Doenças do sistema osteomuscular e do tecido conjuntivo',
 	'perda na qualificada da visao' : 'VII - Doenças do olho e anexos',
 	'covid - 19' : 'XXII - Códigos para propósitos especiais',
+	'covid-19' : 'XXII - Códigos para propósitos especiais',
 	'nodulo hepatico' : 'II - Neoplasmas [tumores]',
 	'dispneia/covid - 19' : 'XVIII - Sintomas, sinais e achados anormais de exames clínicos e de laboratório, não classificados em outra parte ; XXII - Códigos para propósitos especiais',
 	'dengue' : 'I - Algumas doenças infecciosas e parasitárias',

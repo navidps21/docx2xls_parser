@@ -427,15 +427,33 @@ def get_conditionsensitive (dict, tables_data, text_data):
     for i in new_table:
         for j in dict:
             if j in i:
+                if ' ' in j:
+                    conditionsensitive = conditionsensitive + '1'
+                    return (conditionsensitive)
+                else:
+                    new_list = i.replace('.', '').replace(',', '').split(' ')
+                    for i in new_list:
+                        if i in j and len(i) == len(j):
+                            conditionsensitive = conditionsensitive + '1'
+                            return (conditionsensitive)
                 #conditionsensitive = conditionsensitive + 'S'
-                conditionsensitive = conditionsensitive + '1'
-                return (conditionsensitive)
+                #conditionsensitive = conditionsensitive + '1'
+                #return (conditionsensitive)
     for i in new_text:
         for j in dict:
             if j in i:
+                if ' ' in j:
+                    conditionsensitive = conditionsensitive + '1'
+                    return (conditionsensitive)
+                else:
+                    new_list = i.replace('.', '').replace(',', '').split(' ')
+                    for i in new_list:
+                        if i in j and len(i) == len(j):
+                            conditionsensitive = conditionsensitive + '1'
+                            return (conditionsensitive)
                 #conditionsensitive = conditionsensitive + 'S'
-                conditionsensitive = conditionsensitive + '1'
-                return (conditionsensitive)
+                #conditionsensitive = conditionsensitive + '1'
+                #return (conditionsensitive)
     
     #conditionsensitive = conditionsensitive + 'N'
     conditionsensitive = conditionsensitive + '2'
@@ -454,13 +472,31 @@ def get_conditionsensitive_reason (dict, tables_data, text_data):
     for i in new_table:
         for j in dict:
             if j in i:
-                if conditionsensitive_reason.find(str(dict[j])) == -1 :
-                    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+                if ' ' in j:
+                    if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                        conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+                else:
+                    new_list = i.replace('.', '').replace(',', '').split(' ')
+                    for i in new_list:
+                        if i in j and len(i) == len(j):
+                            if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                                conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+                #if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                #    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
     for i in new_text:
         for j in dict:
             if j in i:
-                if conditionsensitive_reason.find(str(dict[j])) == -1 :
-                    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+                if ' ' in j:
+                    if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                        conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+                else:
+                    new_list = i.replace('.', '').replace(',', '').split(' ')
+                    for i in new_list:
+                        if i in j and len(i) == len(j):
+                            if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                                conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+                #if conditionsensitive_reason.find(str(dict[j])) == -1 :
+                #    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
 
     return conditionsensitive_reason
 
