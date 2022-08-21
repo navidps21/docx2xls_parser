@@ -1296,12 +1296,14 @@ def get_servicereceived (tables_data, raw_tables_data, text_data, dict) :
                 if not 'ista' in examslist_temp[i+1]:
                     #print(examslist_temp[i+1])
 
-                    if examlist.find(examslist_temp[i+1]):
+                    if examlist.find(examslist_temp[i+1]) == -1 :
                         examlist = examlist + str(examslist_temp[i+1]).replace('\t', '') + '; '
                 for j in dict:
                     if j in examslist_temp[i+1]:
                         if examlist_new.find(str(dict[j])) == -1 :
                             examlist_new = examlist_new + str(dict[j]) + '; '
+                        if examlist.find(str(dict[j])) == -1 :
+                            examlist = examlist + str(examslist_temp[i+1]) + '; '
     
     tables_data.append(examlist_new)
 
