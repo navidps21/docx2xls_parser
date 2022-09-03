@@ -355,18 +355,18 @@ def get_neglecteddiseases (tables_data, text_data):
         'nematoides de solo'
     ]
 
-    new_text = lowercase_text(text_data)
+    #new_text = lowercase_text(text_data)
 
     new_table = lowercase_table(tables_data)
 
     neglected = 'DOENÇA NEGLIGENCIADA: '
 
     for j in neglecteddiseases:
-        for i in new_text:
-            if j in i:
-                #neglected = neglected + 'S'
-                neglected = neglected + '1'
-                return (neglected)
+        #for i in new_text:
+        #    if j in i:
+        #        #neglected = neglected + 'S'
+        #        neglected = neglected + '1'
+        #        return (neglected)
         for i in new_table:
             if j in i:
                 #neglected = neglected + 'S'
@@ -398,7 +398,7 @@ def get_neglecteddiseases_reason (tables_data, text_data):
 
     new_table = lowercase_table(tables_data)
 
-    new_text = lowercase_text(text_data)
+    #new_text = lowercase_text(text_data)
 
     #print(new_table)
 
@@ -409,18 +409,18 @@ def get_neglecteddiseases_reason (tables_data, text_data):
             if j in i:
                 if neglected_reason.find(str(dict[j])) == -1 :
                     neglected_reason = neglected_reason + str(dict[j]) + '; '
-    for i in new_text:
-        for j in dict:
-            if j in i:
-                if neglected_reason.find(str(dict[j])) == -1 :
-                    neglected_reason = neglected_reason + str(dict[j]) + '; '
+    #for i in new_text:
+    #    for j in dict:
+    #        if j in i:
+    #            if neglected_reason.find(str(dict[j])) == -1 :
+    #                neglected_reason = neglected_reason + str(dict[j]) + '; '
 
     return neglected_reason
 
 def get_conditionsensitive (dict, tables_data, text_data):
     #this function search disease sensitive to primary condition
     
-    new_text = lowercase_text(text_data)
+    #new_text = lowercase_text(text_data)
 
     new_table = lowercase_table(tables_data)
 
@@ -441,18 +441,18 @@ def get_conditionsensitive (dict, tables_data, text_data):
                 #conditionsensitive = conditionsensitive + 'S'
                 #conditionsensitive = conditionsensitive + '1'
                 #return (conditionsensitive)
-    for i in new_text:
-        for j in dict:
-            if j in i:
-                if ' ' in j:
-                    conditionsensitive = conditionsensitive + '1'
-                    return (conditionsensitive)
-                else:
-                    new_list = i.replace('.', '').replace(',', '').split(' ')
-                    for i in new_list:
-                        if i in j and len(i) == len(j):
-                            conditionsensitive = conditionsensitive + '1'
-                            return (conditionsensitive)
+    #for i in new_text:
+    #    for j in dict:
+    #        if j in i:
+    #            if ' ' in j:
+    #                conditionsensitive = conditionsensitive + '1'
+    #                return (conditionsensitive)
+    #            else:
+    #                new_list = i.replace('.', '').replace(',', '').split(' ')
+    #                for i in new_list:
+    #                    if i in j and len(i) == len(j):
+    #                        conditionsensitive = conditionsensitive + '1'
+    #                        return (conditionsensitive)
                 #conditionsensitive = conditionsensitive + 'S'
                 #conditionsensitive = conditionsensitive + '1'
                 #return (conditionsensitive)
@@ -465,7 +465,7 @@ def get_conditionsensitive_reason (dict, tables_data, text_data):
 
     new_table = lowercase_table(tables_data)
 
-    new_text = lowercase_text(text_data)
+    #new_text = lowercase_text(text_data)
 
     #print(new_table)
 
@@ -485,18 +485,18 @@ def get_conditionsensitive_reason (dict, tables_data, text_data):
                                 conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
                 #if conditionsensitive_reason.find(str(dict[j])) == -1 :
                 #    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
-    for i in new_text:
-        for j in dict:
-            if j in i:
-                if ' ' in j:
-                    if conditionsensitive_reason.find(str(dict[j])) == -1 :
-                        conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
-                else:
-                    new_list = i.replace('.', '').replace(',', '').split(' ')
-                    for i in new_list:
-                        if i in j and len(i) == len(j):
-                            if conditionsensitive_reason.find(str(dict[j])) == -1 :
-                                conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+    #for i in new_text:
+    #    for j in dict:
+    #        if j in i:
+    #            if ' ' in j:
+    #                if conditionsensitive_reason.find(str(dict[j])) == -1 :
+    #                    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
+    #            else:
+    #                new_list = i.replace('.', '').replace(',', '').split(' ')
+    #                for i in new_list:
+    #                    if i in j and len(i) == len(j):
+    #                        if conditionsensitive_reason.find(str(dict[j])) == -1 :
+    #                            conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
                 #if conditionsensitive_reason.find(str(dict[j])) == -1 :
                 #    conditionsensitive_reason = conditionsensitive_reason + str(dict[j]) + '; '
 
